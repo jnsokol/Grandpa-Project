@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Read(*)",
+      "Write(src/**)",
+      "Write(tests/**)",
+      "Write(docs/**)",
+      "Write(.codex/**)",
+      "Write(.claude/**)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(wrangler deploy:*)",
+      "Bash(git push:*)",
+      "Write(.env*)"
+    ]
+  }
+}
