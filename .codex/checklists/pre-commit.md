@@ -7,3 +7,6 @@
 - [ ] `docs/BACKLOG.md` updated if new follow-up work appeared.
 - [ ] `docs/DECISIONS.md` updated if a dependency or architecture decision changed.
 - [ ] No secrets or `.env` files committed.
+- [ ] `git status` reviewed.
+- [ ] Changes committed with a clear message.
+- [ ] Current branch pushed to GitHub.

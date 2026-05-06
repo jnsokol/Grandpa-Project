@@ -28,3 +28,10 @@ A browser-based tile dashboard for personal, family, and later other-user use.
 ## Verification
 - Run `npm run lint`, `npm test`, and `npm run build` before declaring implementation work done when feasible.
 - For UI changes, check phone-width and desktop-width layouts.
+
+## Git Workflow
+- After making changes, always check `git status`.
+- Run the feasible verification commands before committing.
+- Commit completed changes with a clear message.
+- Push the current branch to GitHub after committing.
+- If commit or push is blocked by missing remote, credentials, conflicts, or failing checks, stop and report the exact blocker.
