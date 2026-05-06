@@ -35,6 +35,7 @@ A browser-based tile dashboard for personal, family, and later other-user use. R
 - Update `docs/BACKLOG.md` if new work surfaced.
 - Add an ADR to `docs/DECISIONS.md` if a non-trivial decision was made.
 - Run `npm run lint && npm test` before declaring done when feasible.
+- Stage changes with `git add .`, not file-by-file `git add` commands.
 - Always commit completed changes and push the current branch to GitHub.
 - If commit or push is blocked by missing remote, credentials, conflicts, or failing checks, stop and report the exact blocker.
 

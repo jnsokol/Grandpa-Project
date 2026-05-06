@@ -136,8 +136,9 @@ After implementation work:
 
 1. Run feasible verification commands.
 2. Check `git status`.
-3. Commit completed changes with a clear message.
-4. Push the current branch to GitHub.
+3. Stage all changes with `git add .`.
+4. Commit completed changes with a clear message.
+5. Push the current branch to GitHub.
 
 If commit or push is blocked by auth, missing remote, conflicts, or failing checks, report the blocker clearly instead of pretending the workflow is complete.
 

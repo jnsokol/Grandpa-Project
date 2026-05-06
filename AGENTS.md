@@ -32,6 +32,7 @@ A browser-based tile dashboard for personal, family, and later other-user use.
 ## Git Workflow
 - After making changes, always check `git status`.
 - Run the feasible verification commands before committing.
+- Stage changes with `git add .`, not file-by-file `git add` commands.
 - Commit completed changes with a clear message.
 - Push the current branch to GitHub after committing.
 - If commit or push is blocked by missing remote, credentials, conflicts, or failing checks, stop and report the exact blocker.

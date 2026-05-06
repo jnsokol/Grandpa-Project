@@ -8,5 +8,6 @@
 - [ ] `docs/DECISIONS.md` updated if a dependency or architecture decision changed.
 - [ ] No secrets or `.env` files committed.
 - [ ] `git status` reviewed.
+- [ ] Changes staged with `git add .`.
 - [ ] Changes committed with a clear message.
 - [ ] Current branch pushed to GitHub.

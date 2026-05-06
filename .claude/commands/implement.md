@@ -5,6 +5,7 @@ Implement the approved plan for: $ARGUMENTS
 - Run `npm run lint && npm test` and report results when feasible.
 - Do not introduce new top-level dependencies without asking.
 - Update `docs/BACKLOG.md` if you discover follow-up work.
+- Stage changes with `git add .`, not file-by-file `git add` commands.
 - Commit the completed change with a clear message.
 - Push the current branch to GitHub after committing.
 - If commit or push is blocked, report the blocker clearly.
