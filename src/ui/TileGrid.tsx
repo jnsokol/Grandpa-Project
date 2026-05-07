@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import type { Layout, Layouts } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -24,6 +24,12 @@ const ResizeHandle = (
 
 export function TileGrid() {
   const { tiles, layouts, removeTile, updateLayouts } = useTileStore();
+  const prevCount = useRef(tiles.length);
+  useEffect(() => {
+    if (prevCount.current === 0 && tiles.length > 0) window.scrollTo({ top: 0, behavior: 'smooth' });
+    prevCount.current = tiles.length;
+  }, [tiles.length]);
+
   const [dragging, setDragging] = useState(false);
   const [overTrash, setOverTrash] = useState(false);
   const trashRef = useRef<HTMLDivElement>(null);

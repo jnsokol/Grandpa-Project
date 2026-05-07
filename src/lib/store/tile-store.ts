@@ -36,13 +36,13 @@ export const useTileStore = create<TileStore>()(
       addTile: (tile) =>
         set((state) => {
           const lgLayout = state.layouts.lg ?? [];
-          const maxY = lgLayout.reduce((m, l) => Math.max(m, l.y + l.h), 0);
           const size = DEFAULT_SIZES[tile.kind];
+          const shifted = lgLayout.map((l) => ({ ...l, y: l.y + size.h }));
           return {
             tiles: [...state.tiles, tile],
             layouts: {
               ...state.layouts,
-              lg: [...lgLayout, { i: tile.id, x: 0, y: maxY, w: size.w, h: size.h }],
+              lg: [{ i: tile.id, x: 0, y: 0, w: size.w, h: size.h }, ...shifted],
             },
           };
         }),
