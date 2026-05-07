@@ -13,7 +13,7 @@ export function App() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-slate-200">
       <header className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200 shadow-sm">
         <h1 className="text-xl font-semibold text-slate-900">Today</h1>
         <div className="flex gap-2">
