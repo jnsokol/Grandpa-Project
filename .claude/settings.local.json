@@ -13,7 +13,8 @@
       "Write(tests/**)",
       "Write(docs/**)",
       "Write(.codex/**)",
-      "Write(.claude/**)"
+      "Write(.claude/**)",
+      "Bash(pkill -f \"vite\")"
     ],
     "deny": [
       "Bash(rm:*)",
