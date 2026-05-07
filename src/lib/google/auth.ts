@@ -54,15 +54,14 @@ export type AuthStore = {
   clearToken: () => void;
 };
 
-const SESSION_KEY = 'gis-token';
+const TOKEN_KEY = 'gis-token';
 const PROFILE_KEY = 'gis-profile';
 
-function loadFromSession(): TokenData | null {
+function loadToken(): TokenData | null {
   try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
+    const raw = localStorage.getItem(TOKEN_KEY);
     if (!raw) return null;
-    const t = JSON.parse(raw) as TokenData;
-    return Date.now() < t.expires_at ? t : null;
+    return JSON.parse(raw) as TokenData;
   } catch {
     return null;
   }
@@ -70,7 +69,7 @@ function loadFromSession(): TokenData | null {
 
 function loadProfile(): UserProfile | null {
   try {
-    const raw = sessionStorage.getItem(PROFILE_KEY);
+    const raw = localStorage.getItem(PROFILE_KEY);
     return raw ? (JSON.parse(raw) as UserProfile) : null;
   } catch {
     return null;
@@ -78,19 +77,19 @@ function loadProfile(): UserProfile | null {
 }
 
 export const useAuthStore = create<AuthStore>()((set) => ({
-  token: loadFromSession(),
+  token: loadToken(),
   profile: loadProfile(),
   setToken: (token) => {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(token));
+    localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
     set({ token });
   },
   setProfile: (profile) => {
-    sessionStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
     set({ profile });
   },
   clearToken: () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    sessionStorage.removeItem(PROFILE_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(PROFILE_KEY);
     set({ token: null, profile: null });
   },
 }));
@@ -112,6 +111,32 @@ async function fetchUserProfile(accessToken: string): Promise<UserProfile | null
   } catch {
     return null;
   }
+}
+
+export function silentSignIn(scope: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!window.google?.accounts?.oauth2) { reject(new Error('GIS not loaded')); return; }
+    const { setToken, setProfile } = useAuthStore.getState();
+    const client = window.google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope,
+      callback: (response) => {
+        if (response.error) { reject(new Error(response.error)); return; }
+        const tokenData: TokenData = {
+          access_token: response.access_token,
+          scope: response.scope,
+          expires_at: Date.now() + response.expires_in * 1000,
+        };
+        setToken(tokenData);
+        fetchUserProfile(response.access_token).then((profile) => {
+          if (profile) setProfile(profile);
+          resolve();
+        });
+      },
+      error_callback: (err) => reject(new Error(err.type)),
+    });
+    client.requestAccessToken({ prompt: '' });
+  });
 }
 
 export function signIn(scope: string): Promise<void> {

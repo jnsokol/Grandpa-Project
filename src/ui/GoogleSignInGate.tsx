@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useAuthStore, signIn, isTokenValid } from '../lib/google/auth';
+import { useAuthStore, signIn, silentSignIn, isTokenValid } from '../lib/google/auth';
 import { ALL_GOOGLE_SCOPES } from '../lib/google/scopes';
 
 type Props = { children: ReactNode };
@@ -9,6 +9,16 @@ export function GoogleSignInGate({ children }: Props) {
   const token = useAuthStore((s) => s.token);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [silentTried, setSilentTried] = useState(false);
+
+  useEffect(() => {
+    if (isTokenValid(token) || silentTried) return;
+    setSilentTried(true);
+    setLoading(true);
+    silentSignIn(ALL_GOOGLE_SCOPES)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [token, silentTried]);
 
   if (isTokenValid(token)) return <>{children}</>;
 
