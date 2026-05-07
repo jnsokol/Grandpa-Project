@@ -15,28 +15,9 @@ const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   gmail:      { w: 4, h: 5 },
 };
 
-const DEFAULT_TILES: Tile[] = [
-  {
-    kind: 'bookmarks',
-    id: 'bookmarks-default',
-    title: 'Quick Links',
-    links: [
-      { id: 'link-google', label: 'Google', url: 'https://google.com',  icon: '🔍' },
-      { id: 'link-yahoo',  label: 'Yahoo',  url: 'https://yahoo.com',   icon: '🟣' },
-      { id: 'link-onet',   label: 'Onet',   url: 'https://onet.pl',     icon: '🔴' },
-    ],
-  },
-  { kind: 'calculator', id: 'calculator-default' },
-  { kind: 'rss', id: 'rss-onet', feedUrl: 'https://wiadomosci.onet.pl/rss/wiadomosci-rss.xml', label: 'Onet Wiadomości' },
-];
+const DEFAULT_TILES: Tile[] = [];
 
-const DEFAULT_LAYOUTS: Layouts = {
-  lg: [
-    { i: 'bookmarks-default',  x: 0, y: 0, w: 3, h: 3 },
-    { i: 'calculator-default', x: 3, y: 0, w: 3, h: 5 },
-    { i: 'rss-onet',           x: 6, y: 0, w: 4, h: 4 },
-  ],
-};
+const DEFAULT_LAYOUTS: Layouts = {};
 
 type TileStore = {
   tiles: Tile[];
@@ -81,7 +62,7 @@ export const useTileStore = create<TileStore>()(
     }),
     {
       name: 'dashboard-tiles',
-      version: 3,
+      version: 4,
       migrate: () => ({ tiles: DEFAULT_TILES, layouts: DEFAULT_LAYOUTS }),
     }
   )
