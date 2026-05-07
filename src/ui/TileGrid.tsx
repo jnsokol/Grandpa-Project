@@ -20,8 +20,10 @@ export function TileGrid() {
 
   if (tiles.length === 0) {
     return (
-      <div className="text-center py-20 text-slate-400 text-sm">
-        No tiles yet — add one using the buttons above.
+      <div className="flex flex-col items-center justify-center py-32 gap-3 text-center">
+        <span className="text-5xl">🧩</span>
+        <p className="text-slate-500 font-medium">Your dashboard is empty</p>
+        <p className="text-slate-400 text-sm">Click <strong>+ Add tile</strong> in the top-right to get started.</p>
       </div>
     );
   }
@@ -32,10 +34,10 @@ export function TileGrid() {
       layouts={layouts}
       breakpoints={BREAKPOINTS}
       cols={COLS}
-      rowHeight={80}
+      rowHeight={90}
       draggableHandle=".drag-handle"
       onLayoutChange={handleLayoutChange}
-      margin={[12, 12]}
+      margin={[16, 16]}
     >
       {tiles.map((tile) => (
         <div key={tile.id}>

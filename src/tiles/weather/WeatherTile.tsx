@@ -198,12 +198,12 @@ export function WeatherTile({ tile }: Props) {
     <div className="flex flex-col gap-2 h-full">
       {/* current */}
       <div className="flex items-center gap-3">
-        <span className="text-4xl leading-none">{weatherEmoji(current.weather_code)}</span>
+        <span className="text-5xl leading-none">{weatherEmoji(current.weather_code)}</span>
         <div>
-          <p className="text-2xl font-semibold text-slate-900 leading-none">
+          <p className="text-3xl font-bold text-slate-900 leading-none tabular-nums">
             {Math.round(current.temperature_2m)}°C
           </p>
-          <p className="text-xs text-slate-500 mt-0.5">{weatherDesc(current.weather_code)}</p>
+          <p className="text-sm text-slate-500 mt-1">{weatherDesc(current.weather_code)}</p>
         </div>
       </div>
 
@@ -212,12 +212,12 @@ export function WeatherTile({ tile }: Props) {
       )}
 
       {/* 3-day forecast */}
-      <div className="grid grid-cols-3 gap-1 mt-1">
+      <div className="grid grid-cols-3 gap-2 mt-1">
         {daily.time.map((dateStr, i) => (
-          <div key={dateStr} className="flex flex-col items-center gap-0.5 bg-slate-50 rounded p-1">
-            <span className="text-xs font-medium text-slate-500">{dayLabel(dateStr, i)}</span>
-            <span className="text-lg leading-none">{weatherEmoji(daily.weather_code[i])}</span>
-            <span className="text-xs font-semibold text-slate-800">{Math.round(daily.temperature_2m_max[i])}°</span>
+          <div key={dateStr} className="flex flex-col items-center gap-1 bg-slate-50 border border-slate-100 rounded-xl py-2 px-1">
+            <span className="text-xs font-semibold text-slate-600 uppercase tracking-wide">{dayLabel(dateStr, i)}</span>
+            <span className="text-2xl leading-none">{weatherEmoji(daily.weather_code[i])}</span>
+            <span className="text-sm font-bold text-slate-800">{Math.round(daily.temperature_2m_max[i])}°</span>
             <span className="text-xs text-slate-400">{Math.round(daily.temperature_2m_min[i])}°</span>
           </div>
         ))}

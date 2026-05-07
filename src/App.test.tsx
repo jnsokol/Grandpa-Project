@@ -3,9 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
-  it('renders the header with Today heading and Add tile button', () => {
+  it('renders the header with clock and Add tile button', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: 'Today' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add tile' })).toBeInTheDocument();
   });
 

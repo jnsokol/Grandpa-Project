@@ -86,45 +86,45 @@ export function CalculatorTile(_: { tile: CalculatorTileType }) {
 
   return (
     <div className="flex flex-col gap-1.5 h-full">
-      <div className="rounded bg-slate-900 text-white px-3 py-2 min-h-[3.5rem] flex flex-col justify-end">
+      <div className="rounded-xl bg-slate-900 text-white px-4 py-3 min-h-[4rem] flex flex-col justify-end">
         {calc.op && (
           <span className="text-xs text-slate-400 truncate text-right">
             {calc.prev} {calc.op}
           </span>
         )}
         <span
-          className="text-2xl font-light truncate text-right"
+          className="text-3xl font-semibold truncate text-right tabular-nums"
           role="status"
           aria-label="calculator display"
         >
           {calc.display}
         </span>
       </div>
-      <div className="flex-1 grid grid-cols-4 gap-1 min-h-0">
+      <div className="flex-1 grid grid-cols-4 gap-1.5 min-h-0">
         {topRows.map((btn) => (
           <button
             key={btn}
             onClick={() => handle(btn)}
-            className={`rounded text-sm font-medium transition-colors ${cls(btn)}`}
+            className={`rounded-xl text-base font-semibold transition-colors active:scale-95 ${cls(btn)}`}
           >
             {btn}
           </button>
         ))}
         <button
           onClick={() => handle('0')}
-          className={`col-span-2 rounded text-sm font-medium transition-colors ${cls('0')}`}
+          className={`col-span-2 rounded-xl text-base font-semibold transition-colors active:scale-95 ${cls('0')}`}
         >
           0
         </button>
         <button
           onClick={() => handle('.')}
-          className={`rounded text-sm font-medium transition-colors ${cls('.')}`}
+          className={`rounded-xl text-base font-semibold transition-colors active:scale-95 ${cls('.')}`}
         >
           .
         </button>
         <button
           onClick={() => handle('=')}
-          className={`rounded text-sm font-medium transition-colors ${cls('=')}`}
+          className={`rounded-xl text-base font-semibold transition-colors active:scale-95 ${cls('=')}`}
         >
           =
         </button>
