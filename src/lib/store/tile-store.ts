@@ -12,7 +12,6 @@ const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   gcal:       { w: 4, h: 4 },
   gdrive:     { w: 3, h: 3 },
   rss:        { w: 4, h: 4 },
-  ai:         { w: 4, h: 5 },
   gmail:      { w: 4, h: 5 },
 };
 
