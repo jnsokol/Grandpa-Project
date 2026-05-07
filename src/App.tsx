@@ -12,6 +12,10 @@ export function App() {
     addTile({ kind: 'calculator', id: crypto.randomUUID() });
   }
 
+  function addWeather() {
+    addTile({ kind: 'weather', id: crypto.randomUUID(), locationMode: 'geolocation' });
+  }
+
   return (
     <main className="min-h-screen bg-slate-200">
       <header className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200 shadow-sm">
@@ -28,6 +32,12 @@ export function App() {
             className="text-sm px-3 py-1.5 border border-slate-300 rounded hover:bg-slate-50 text-slate-700 transition-colors"
           >
             + Calculator
+          </button>
+          <button
+            onClick={addWeather}
+            className="text-sm px-3 py-1.5 border border-slate-300 rounded hover:bg-slate-50 text-slate-700 transition-colors"
+          >
+            + Weather
           </button>
         </div>
       </header>

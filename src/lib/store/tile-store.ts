@@ -7,7 +7,7 @@ const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   launcher: { w: 2, h: 3 },
   calculator: { w: 3, h: 5 },
   todo: { w: 3, h: 4 },
-  weather: { w: 3, h: 3 },
+  weather: { w: 3, h: 4 },
   gcal: { w: 4, h: 4 },
   gdrive: { w: 3, h: 3 },
   rss: { w: 4, h: 3 },
