@@ -16,3 +16,8 @@ textarea,
 select {
   font: inherit;
 }
+
+/* Hide the default react-resizable arrow — we use our own custom handle */
+.react-resizable-handle::after {
+  display: none !important;
+}
