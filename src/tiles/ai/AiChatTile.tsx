@@ -5,16 +5,13 @@ import type { AiTile } from '../../lib/store/tiles';
 type Message = { role: 'user' | 'assistant'; content: string };
 type Props = { tile: AiTile };
 
-const PROXY_URL = import.meta.env.VITE_RSS_PROXY_URL ?? '';
-
 const MODELS: Record<'openai' | 'anthropic', string[]> = {
   openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo'],
   anthropic: ['claude-opus-4-7', 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
 };
 
 async function chat(provider: 'openai' | 'anthropic', model: string, system: string, messages: Message[]): Promise<string> {
-  if (!PROXY_URL) throw new Error('VITE_RSS_PROXY_URL is not set — deploy the Cloudflare Worker first.');
-  const res = await fetch(`${PROXY_URL}/ai`, {
+  const res = await fetch('/.netlify/functions/ai', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ provider, model, system, messages }),
@@ -113,11 +110,6 @@ export function AiChatTile({ tile }: Props) {
             className="bg-white/15 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white placeholder-white/30 outline-none resize-none" />
         </div>
 
-        {!PROXY_URL && (
-          <p className="text-xs text-yellow-300 shrink-0">
-            ⚠ Deploy the Cloudflare Worker and set VITE_RSS_PROXY_URL to enable AI.
-          </p>
-        )}
 
         <div className="flex gap-2 mt-auto shrink-0">
           <button onClick={saveSettings}

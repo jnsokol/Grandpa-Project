@@ -5,7 +5,7 @@ import type { RssTile } from '../../lib/store/tiles';
 type RssItem = { title: string; link: string; pubDate: string; description: string };
 type Props = { tile: RssTile };
 
-const PROXY_URL = import.meta.env.VITE_RSS_PROXY_URL ?? '';
+const PROXY_URL = '/.netlify/functions/rss';
 
 function formatDate(raw: string): string {
   if (!raw) return '';
@@ -25,7 +25,7 @@ export function NewsTile({ tile }: Props) {
   const urlRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!tile.feedUrl || !PROXY_URL || editing) return;
+    if (!tile.feedUrl || editing) return;
     setLoading(true);
     setError(null);
     fetch(`${PROXY_URL}?url=${encodeURIComponent(tile.feedUrl)}`)
@@ -53,9 +53,7 @@ export function NewsTile({ tile }: Props) {
           onKeyDown={(e) => { if (e.key === 'Enter') saveConfig(); }}
           placeholder="Label (optional)"
           className="bg-white/15 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/50" />
-        {!PROXY_URL && (
-          <p className="text-xs text-red-200">Set VITE_RSS_PROXY_URL to enable fetching.</p>
-        )}
+
         <div className="flex gap-2">
           <button onClick={saveConfig} disabled={!draftUrl.trim()}
             className="flex-1 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-semibold text-white disabled:opacity-40 transition-colors">
@@ -74,7 +72,6 @@ export function NewsTile({ tile }: Props) {
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
         <div>
           <p className="text-base font-bold">📰 {tile.label || 'News'}</p>
-          {!PROXY_URL && <p className="text-red-200 text-xs">Proxy not configured</p>}
         </div>
         <button onClick={() => setEditing(true)} className="text-rose-300 hover:text-white text-sm transition-colors" aria-label="Edit feed">✎</button>
       </div>
@@ -82,7 +79,7 @@ export function NewsTile({ tile }: Props) {
       <div className="flex-1 overflow-auto px-3 pb-3 min-h-0 flex flex-col gap-1.5">
         {loading && <p className="text-rose-200 text-sm text-center mt-4">Loading feed…</p>}
         {error && <p className="text-red-200 text-xs text-center mt-2">{error}</p>}
-        {!loading && !error && PROXY_URL && items.length === 0 && (
+        {!loading && !error && items.length === 0 && (
           <p className="text-rose-200 text-sm text-center mt-4">No items found.</p>
         )}
         {items.slice(0, 10).map((item, i) => (
