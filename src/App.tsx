@@ -28,6 +28,10 @@ export function App() {
     addTile({ kind: 'gdrive', id: crypto.randomUUID() });
   }
 
+  function addNews() {
+    addTile({ kind: 'rss', id: crypto.randomUUID(), feedUrl: '', label: 'News' });
+  }
+
   return (
     <main className="min-h-screen bg-slate-200">
       <header className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200 shadow-sm">
@@ -68,6 +72,12 @@ export function App() {
             className="text-sm px-3 py-1.5 border border-slate-300 rounded hover:bg-slate-50 text-slate-700 transition-colors"
           >
             + Drive
+          </button>
+          <button
+            onClick={addNews}
+            className="text-sm px-3 py-1.5 border border-slate-300 rounded hover:bg-slate-50 text-slate-700 transition-colors"
+          >
+            + News
           </button>
         </div>
       </header>

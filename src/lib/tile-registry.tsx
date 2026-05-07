@@ -6,6 +6,7 @@ import { WeatherTile } from '../tiles/weather/WeatherTile';
 import { GoogleCalendarTile } from '../tiles/google-calendar/GoogleCalendarTile';
 import { GoogleTasksTile } from '../tiles/google-tasks/GoogleTasksTile';
 import { GoogleDriveTile } from '../tiles/google-drive/GoogleDriveTile';
+import { NewsTile } from '../tiles/news/NewsTile';
 
 export const TILE_LABELS: Record<Tile['kind'], string> = {
   launcher: 'Launcher',
@@ -31,6 +32,8 @@ export function renderTile(tile: Tile): ReactNode {
       return <GoogleTasksTile tile={tile} />;
     case 'gdrive':
       return <GoogleDriveTile />;
+    case 'rss':
+      return <NewsTile tile={tile} />;
     default:
       return (
         <div className="flex items-center justify-center h-full text-sm text-slate-400">
