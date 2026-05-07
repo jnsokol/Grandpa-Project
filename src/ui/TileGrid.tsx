@@ -78,10 +78,10 @@ export function TileGrid() {
 
   if (tiles.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-32 gap-3 text-center">
-        <span className="text-5xl">🧩</span>
-        <p className="text-slate-600 font-medium">Your dashboard is empty</p>
-        <p className="text-slate-500 text-sm">Click the <strong>+</strong> button to add a tile.</p>
+      <div className="flex flex-col items-center justify-center py-40 gap-4 text-center">
+        <span className="text-6xl opacity-40">🧩</span>
+        <p className="text-zinc-400 font-semibold text-lg">Your dashboard is empty</p>
+        <p className="text-zinc-600 text-sm">Click <strong className="text-zinc-400">+ Add tile</strong> in the top-right to get started.</p>
       </div>
     );
   }

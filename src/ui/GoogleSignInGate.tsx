@@ -25,32 +25,39 @@ export function GoogleSignInGate({ children }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-8 p-8">
+    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center gap-10 p-8">
+
+      {/* Title */}
       <div className="flex flex-col items-center gap-2">
-        <h1 className="text-3xl font-bold text-white font-mono tracking-widest">
-          &lt;Grandpa Project /&gt;
+        <h1 className="text-4xl font-bold text-white tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          Grandpa Project
         </h1>
-        <p className="text-slate-400 text-sm">Personal family dashboard</p>
+        <p className="text-zinc-500 text-sm tracking-wide">Personal family dashboard</p>
       </div>
 
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-8 flex flex-col items-center gap-6 w-full max-w-sm shadow-2xl">
-        <div className="text-5xl">👴</div>
+      {/* Card */}
+      <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-8 flex flex-col items-center gap-6 w-full max-w-sm shadow-[0_24px_64px_rgba(0,0,0,0.7)]">
+
+        <div className="w-16 h-16 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-3xl shadow-inner">
+          👴
+        </div>
+
         <div className="text-center">
-          <p className="text-white font-semibold text-lg">Sign in with Google</p>
-          <p className="text-slate-400 text-sm mt-1">
-            Connects Calendar, Tasks &amp; Drive all at once
+          <p className="text-white font-semibold text-lg">Welcome back</p>
+          <p className="text-zinc-500 text-sm mt-1">
+            Sign in to access your dashboard
           </p>
         </div>
 
         <button
           onClick={handleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 px-5 py-3 bg-white hover:bg-slate-100 text-slate-800 rounded-xl font-semibold text-sm shadow transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-3 px-5 py-3 bg-white hover:bg-zinc-100 text-zinc-900 rounded-xl font-semibold text-sm shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {loading ? (
-            <span className="animate-spin text-lg">⟳</span>
+            <span className="text-lg leading-none animate-spin inline-block">⟳</span>
           ) : (
-            <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
               <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
@@ -61,9 +68,11 @@ export function GoogleSignInGate({ children }: Props) {
           {loading ? 'Signing in…' : 'Continue with Google'}
         </button>
 
-        {error && (
-          <p className="text-red-400 text-xs text-center">{error}</p>
-        )}
+        {error && <p className="text-red-400 text-xs text-center">{error}</p>}
+
+        <p className="text-zinc-600 text-xs text-center leading-relaxed">
+          Connects Calendar, Tasks, Drive &amp; Gmail in one step
+        </p>
       </div>
     </div>
   );
