@@ -46,6 +46,20 @@ export type RssTile = {
   label: string;
 };
 
+export type BookmarkLink = {
+  id: string;
+  label: string;
+  url: string;
+  icon?: string;
+};
+
+export type BookmarksTile = {
+  kind: 'bookmarks';
+  id: string;
+  title: string;
+  links: BookmarkLink[];
+};
+
 export type Tile =
   | LauncherTile
   | CalculatorTile
@@ -53,4 +67,5 @@ export type Tile =
   | WeatherTile
   | GCalTile
   | GDriveTile
-  | RssTile;
+  | RssTile
+  | BookmarksTile;

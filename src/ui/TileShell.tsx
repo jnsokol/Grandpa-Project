@@ -7,7 +7,7 @@ type Props = {
 
 export function TileShell({ children, onRemove }: Props) {
   return (
-    <div className="h-full rounded-2xl bg-white flex flex-col overflow-hidden transition-all duration-200 shadow-[0_4px_20px_rgba(0,0,0,0.10)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] border border-white/80 ring-1 ring-slate-900/5">
+    <div className="h-full rounded-2xl bg-white flex flex-col overflow-hidden transition-all duration-200 shadow-[0_6px_24px_rgba(0,0,0,0.15),0_1px_4px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.10)] hover:-translate-y-0.5 border border-slate-200 ring-1 ring-black/5">
       <div className="drag-handle flex items-center justify-between px-3 py-1.5 bg-slate-50 border-b border-slate-100 cursor-grab active:cursor-grabbing select-none shrink-0">
         <span className="text-slate-300 text-sm tracking-widest" aria-hidden="true">⠿⠿</span>
         <button

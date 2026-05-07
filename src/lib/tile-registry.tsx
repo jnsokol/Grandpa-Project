@@ -7,6 +7,7 @@ import { GoogleCalendarTile } from '../tiles/google-calendar/GoogleCalendarTile'
 import { GoogleTasksTile } from '../tiles/google-tasks/GoogleTasksTile';
 import { GoogleDriveTile } from '../tiles/google-drive/GoogleDriveTile';
 import { NewsTile } from '../tiles/news/NewsTile';
+import { BookmarksTile } from '../tiles/bookmarks/BookmarksTile';
 
 export const TILE_LABELS: Record<Tile['kind'], string> = {
   launcher: 'Launcher',
@@ -16,6 +17,7 @@ export const TILE_LABELS: Record<Tile['kind'], string> = {
   gcal: 'Google Calendar',
   gdrive: 'Google Drive',
   rss: 'News',
+  bookmarks: 'Bookmarks',
 };
 
 export function renderTile(tile: Tile): ReactNode {
@@ -34,6 +36,8 @@ export function renderTile(tile: Tile): ReactNode {
       return <GoogleDriveTile />;
     case 'rss':
       return <NewsTile tile={tile} />;
+    case 'bookmarks':
+      return <BookmarksTile tile={tile} />;
     default:
       return (
         <div className="flex items-center justify-center h-full text-sm text-slate-400">

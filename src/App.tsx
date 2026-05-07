@@ -11,6 +11,7 @@ export function App() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const menuItems: MenuItem[] = [
+    { label: 'Bookmarks', emoji: '🔖', shortcut: 'B', action: () => addTile({ kind: 'bookmarks', id: crypto.randomUUID(), title: 'Links', links: [] }) },
     { label: 'Launcher', emoji: '🔗', shortcut: 'L', action: () => addTile({ kind: 'launcher', id: crypto.randomUUID(), label: 'New Link', url: '' }) },
     { label: 'Calculator', emoji: '🔢', shortcut: 'C', action: () => addTile({ kind: 'calculator', id: crypto.randomUUID() }) },
     { label: 'Weather', emoji: '🌤️', shortcut: 'W', action: () => addTile({ kind: 'weather', id: crypto.randomUUID(), locationMode: 'geolocation' }) },
@@ -44,7 +45,7 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-200 to-slate-300">
-      <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-white/80 backdrop-blur border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-slate-800 border-b-4 border-blue-600 shadow-xl">
         <Clock />
         <div className="relative" ref={menuRef}>
           <button
@@ -52,7 +53,7 @@ export function App() {
             aria-expanded={menuOpen}
             aria-haspopup="menu"
             aria-label="Add tile"
-            className="flex items-center gap-2 text-sm px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 active:scale-95 transition-all font-semibold shadow-sm"
+            className="flex items-center gap-2 text-sm px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-400 active:scale-95 transition-all font-semibold shadow-md"
           >
             <span aria-hidden="true" className="text-base leading-none">+</span> Add tile
           </button>
