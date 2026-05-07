@@ -25,6 +25,12 @@ A browser-based tile dashboard for personal, family, and later other-user use.
 - Shared UI primitives go in `src/ui/`.
 - Shared API/store code goes in `src/lib/`.
 
+## Source of Truth
+- `dashboard-plan.md` is the single source of truth for this project.
+- Before every task, read `dashboard-plan.md` and compare your planned work against it.
+- After every change, verify the result matches the rules, architecture, and conventions defined there.
+- If anything you are about to do conflicts with `dashboard-plan.md`, stop and flag it instead of proceeding.
+
 ## Verification
 - Run `npm run lint`, `npm test`, and `npm run build` before declaring implementation work done when feasible.
 - For UI changes, check phone-width and desktop-width layouts.
