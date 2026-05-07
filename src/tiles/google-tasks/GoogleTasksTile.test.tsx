@@ -19,7 +19,7 @@ afterEach(() => {
 describe('GoogleTasksTile', () => {
   it('shows connect button when not authenticated', () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: null, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: null, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     render(<GoogleTasksTile tile={tile} />);
     expect(screen.getByText('Connect Google Tasks')).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe('GoogleTasksTile', () => {
 
   it('shows loading state while fetching task lists', () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(tasksApi, 'fetchTaskLists').mockReturnValue(new Promise(() => {}));
     vi.spyOn(tasksApi, 'fetchTasks').mockReturnValue(new Promise(() => {}));
@@ -37,7 +37,7 @@ describe('GoogleTasksTile', () => {
 
   it('renders tasks from API', async () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(tasksApi, 'fetchTaskLists').mockResolvedValue([{ id: 'list-1', title: 'My Tasks' }]);
     vi.spyOn(tasksApi, 'fetchTasks').mockResolvedValue([
@@ -49,7 +49,7 @@ describe('GoogleTasksTile', () => {
 
   it('shows empty message when there are no active tasks', async () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(tasksApi, 'fetchTaskLists').mockResolvedValue([{ id: 'list-1', title: 'My Tasks' }]);
     vi.spyOn(tasksApi, 'fetchTasks').mockResolvedValue([]);
@@ -59,7 +59,7 @@ describe('GoogleTasksTile', () => {
 
   it('adds a new task via input', async () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(tasksApi, 'fetchTaskLists').mockResolvedValue([{ id: 'list-1', title: 'My Tasks' }]);
     vi.spyOn(tasksApi, 'fetchTasks').mockResolvedValue([]);

@@ -17,7 +17,7 @@ afterEach(() => {
 describe('GoogleDriveTile', () => {
   it('shows connect button when not authenticated', () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: null, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: null, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     render(<GoogleDriveTile />);
     expect(screen.getByText('Connect Google Drive')).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('GoogleDriveTile', () => {
 
   it('shows loading state while fetching', () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(driveApi, 'fetchRecentFiles').mockReturnValue(new Promise(() => {}));
     render(<GoogleDriveTile />);
@@ -34,7 +34,7 @@ describe('GoogleDriveTile', () => {
 
   it('renders file names', async () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(driveApi, 'fetchRecentFiles').mockResolvedValue([
       {
@@ -51,7 +51,7 @@ describe('GoogleDriveTile', () => {
 
   it('shows empty message when no files returned', async () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: validToken, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.spyOn(driveApi, 'fetchRecentFiles').mockResolvedValue([]);
     render(<GoogleDriveTile />);

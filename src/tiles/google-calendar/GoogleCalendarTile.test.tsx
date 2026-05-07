@@ -12,7 +12,7 @@ afterEach(() => {
 describe('GoogleCalendarTile', () => {
   it('shows connect button when not authenticated', () => {
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token: null, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token: null, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     render(<GoogleCalendarTile tile={tile} />);
     expect(screen.getByText('Connect Google Calendar')).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('GoogleCalendarTile', () => {
       expires_at: Date.now() + 3_600_000,
     };
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})));
     render(<GoogleCalendarTile tile={tile} />);
@@ -39,7 +39,7 @@ describe('GoogleCalendarTile', () => {
       expires_at: Date.now() + 3_600_000,
     };
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     vi.stubGlobal(
       'fetch',
@@ -56,7 +56,7 @@ describe('GoogleCalendarTile', () => {
       expires_at: Date.now() + 3_600_000,
     };
     vi.spyOn(auth, 'useAuthStore').mockImplementation((sel: (s: auth.AuthStore) => unknown) =>
-      sel({ token, setToken: vi.fn(), clearToken: vi.fn() }),
+      sel({ token, setToken: vi.fn(), clearToken: vi.fn(), profile: null, setProfile: vi.fn() }),
     );
     const items = [
       { id: '1', summary: 'Team Standup', start: { dateTime: new Date(Date.now() + 3600_000).toISOString() } },
