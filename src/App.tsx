@@ -1,29 +1,17 @@
-import GridLayout from "react-grid-layout";
-import "react-grid-layout/css/styles.css";
-import "react-resizable/css/styles.css";
+import { TileCard } from './ui/TileCard';
+import { initialTiles } from './lib/store/initial-tiles';
 
-function App() {
-  const layout = [
-    { i: "a", x: 0, y: 0, w: 2, h: 2 },
-    { i: "b", x: 2, y: 0, w: 2, h: 2 },
-  ];
-
+export function App() {
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Dashboard 🔥</h1>
-
-      <GridLayout
-        className="layout"
-        layout={layout}
-        cols={4}
-        rowHeight={100}
-        width={800}
-      >
-        <div key="a" style={{ background: "#ddd" }}>Tile A</div>
-        <div key="b" style={{ background: "#bbb" }}>Tile B</div>
-      </GridLayout>
-    </div>
+    <main className="min-h-screen bg-slate-50 p-4">
+      <h1 className="mb-6 text-2xl font-bold text-slate-900">Today</h1>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {initialTiles.map((tile) => (
+          <TileCard key={tile.id} title={tile.title} eyebrow={tile.eyebrow}>
+            <p className="text-sm text-slate-600">{tile.description}</p>
+          </TileCard>
+        ))}
+      </div>
+    </main>
   );
 }
-
-export default App;
