@@ -14,7 +14,8 @@
       "Write(docs/**)",
       "Write(.codex/**)",
       "Write(.claude/**)",
-      "Bash(pkill -f \"vite\")"
+      "Bash(pkill -f \"vite\")",
+      "Bash(git rm *)"
     ],
     "deny": [
       "Bash(rm:*)",

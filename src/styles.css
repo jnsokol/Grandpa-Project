@@ -21,3 +21,10 @@ select {
 .react-resizable-handle::after {
   display: none !important;
 }
+
+/* Drag placeholder — match tile shape and use a neutral color */
+.react-grid-layout .react-grid-placeholder {
+  background: #3b82f6 !important;
+  opacity: 0.25 !important;
+  border-radius: 1rem !important;
+}

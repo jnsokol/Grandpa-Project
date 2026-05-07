@@ -11,12 +11,13 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 const BREAKPOINTS = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 };
 const COLS = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
 
-// Custom resize handle — visible dark grip in the bottom-right corner
+// Custom resize handle — sits inside the rounded tile, bottom-right corner
 const ResizeHandle = (
-  <div className="react-resizable-handle absolute bottom-0 right-0 w-6 h-6 cursor-se-resize flex items-end justify-end pb-1 pr-1 group z-10">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M11 1L1 11" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
-      <path d="M11 6L6 11" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
+  <div className="react-resizable-handle absolute bottom-2 right-2 w-5 h-5 cursor-se-resize flex items-center justify-center z-10 opacity-60 hover:opacity-100 transition-opacity">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <circle cx="8" cy="8" r="1.2" fill="#64748b" />
+      <circle cx="4.5" cy="8" r="1.2" fill="#64748b" />
+      <circle cx="8" cy="4.5" r="1.2" fill="#64748b" />
     </svg>
   </div>
 );
@@ -51,7 +52,7 @@ export function TileGrid() {
       resizeHandle={ResizeHandle}
     >
       {tiles.map((tile) => (
-        <div key={tile.id} className="relative">
+        <div key={tile.id} className="relative rounded-2xl overflow-hidden">
           <TileShell onRemove={() => removeTile(tile.id)}>
             {renderTile(tile)}
           </TileShell>
