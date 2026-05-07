@@ -44,10 +44,13 @@ export function App() {
   }, [menuOpen]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-200 to-slate-300">
-      <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-slate-800 border-b-4 border-blue-600 shadow-xl">
+    <div className="min-h-screen bg-slate-400">
+      <header className="sticky top-0 z-10 grid grid-cols-3 items-center px-6 py-4 bg-slate-900 border-b-4 border-blue-500 shadow-2xl">
         <Clock />
-        <div className="relative" ref={menuRef}>
+        <h1 className="text-center text-xl font-bold text-white tracking-widest font-mono">
+          &lt;Grandpa Project /&gt;
+        </h1>
+        <div className="flex justify-end relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((v) => !v)}
             aria-expanded={menuOpen}

@@ -7,12 +7,19 @@ type Props = {
 
 export function TileShell({ children, onRemove }: Props) {
   return (
-    <div className="h-full rounded-2xl bg-white flex flex-col overflow-hidden transition-all duration-200 shadow-[0_6px_24px_rgba(0,0,0,0.15),0_1px_4px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.10)] hover:-translate-y-0.5 border border-slate-200 ring-1 ring-black/5">
-      <div className="drag-handle flex items-center justify-between px-3 py-1.5 bg-slate-50 border-b border-slate-100 cursor-grab active:cursor-grabbing select-none shrink-0">
-        <span className="text-slate-300 text-sm tracking-widest" aria-hidden="true">⠿⠿</span>
+    <div className="h-full rounded-2xl bg-white flex flex-col overflow-hidden transition-all duration-200 shadow-[0_6px_24px_rgba(0,0,0,0.18),0_1px_4px_rgba(0,0,0,0.10)] hover:shadow-[0_14px_40px_rgba(0,0,0,0.26),0_2px_8px_rgba(0,0,0,0.12)] hover:-translate-y-0.5 border-2 border-slate-300">
+      {/* Tile header bar — dark, always visible */}
+      <div className="drag-handle flex items-center justify-between px-3 py-2 bg-slate-700 cursor-grab active:cursor-grabbing select-none shrink-0">
+        {/* Drag dots */}
+        <div className="flex items-center gap-0.5" aria-hidden="true">
+          {[...Array(6)].map((_, i) => (
+            <span key={i} className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+          ))}
+        </div>
+        {/* Close button */}
         <button
           onClick={onRemove}
-          className="w-5 h-5 flex items-center justify-center rounded-full text-slate-300 hover:bg-red-100 hover:text-red-500 transition-colors text-base leading-none"
+          className="w-6 h-6 flex items-center justify-center rounded-full bg-red-500 hover:bg-red-400 text-white font-bold text-sm leading-none transition-colors"
           aria-label="Remove tile"
         >
           ×
