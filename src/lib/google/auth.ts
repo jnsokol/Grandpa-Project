@@ -40,13 +40,22 @@ export type TokenData = {
   expires_at: number;
 };
 
+export type UserProfile = {
+  name: string;
+  email: string;
+  picture: string;
+};
+
 export type AuthStore = {
   token: TokenData | null;
+  profile: UserProfile | null;
   setToken: (token: TokenData) => void;
+  setProfile: (profile: UserProfile) => void;
   clearToken: () => void;
 };
 
 const SESSION_KEY = 'gis-token';
+const PROFILE_KEY = 'gis-profile';
 
 function loadFromSession(): TokenData | null {
   try {
@@ -59,19 +68,83 @@ function loadFromSession(): TokenData | null {
   }
 }
 
+function loadProfile(): UserProfile | null {
+  try {
+    const raw = sessionStorage.getItem(PROFILE_KEY);
+    return raw ? (JSON.parse(raw) as UserProfile) : null;
+  } catch {
+    return null;
+  }
+}
+
 export const useAuthStore = create<AuthStore>()((set) => ({
   token: loadFromSession(),
+  profile: loadProfile(),
   setToken: (token) => {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(token));
     set({ token });
   },
+  setProfile: (profile) => {
+    sessionStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    set({ profile });
+  },
   clearToken: () => {
     sessionStorage.removeItem(SESSION_KEY);
-    set({ token: null });
+    sessionStorage.removeItem(PROFILE_KEY);
+    set({ token: null, profile: null });
   },
 }));
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
+
+async function fetchUserProfile(accessToken: string): Promise<UserProfile | null> {
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!res.ok) return null;
+    const data = await res.json() as { name?: string; email?: string; picture?: string };
+    return {
+      name: data.name ?? '',
+      email: data.email ?? '',
+      picture: data.picture ?? '',
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function signIn(scope: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!window.google?.accounts?.oauth2) {
+      reject(new Error('Google Identity Services not loaded. Refresh and try again.'));
+      return;
+    }
+    const { setToken, setProfile } = useAuthStore.getState();
+    const client = window.google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope,
+      callback: (response) => {
+        if (response.error) {
+          reject(new Error(response.error_description ?? response.error));
+          return;
+        }
+        const tokenData: TokenData = {
+          access_token: response.access_token,
+          scope: response.scope,
+          expires_at: Date.now() + response.expires_in * 1000,
+        };
+        setToken(tokenData);
+        fetchUserProfile(response.access_token).then((profile) => {
+          if (profile) setProfile(profile);
+          resolve();
+        });
+      },
+      error_callback: (err) => reject(new Error(err.type)),
+    });
+    client.requestAccessToken({ prompt: '' });
+  });
+}
 
 export function requestToken(scope: string): Promise<void> {
   return new Promise((resolve, reject) => {

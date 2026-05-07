@@ -15,7 +15,9 @@
       "Write(.codex/**)",
       "Write(.claude/**)",
       "Bash(pkill -f \"vite\")",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(npx tsc *)",
+      "Bash(npx vite *)"
     ],
     "deny": [
       "Bash(rm:*)",

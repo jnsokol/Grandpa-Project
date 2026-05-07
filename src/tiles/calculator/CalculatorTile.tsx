@@ -85,8 +85,8 @@ export function CalculatorTile(_: { tile: CalculatorTileType }) {
   const topRows = ['C', '±', '%', '÷', '7', '8', '9', '×', '4', '5', '6', '−', '1', '2', '3', '+'];
 
   return (
-    <div className="flex flex-col gap-1.5 h-full">
-      <div className="rounded-xl bg-slate-900 text-white px-4 py-3 min-h-[4rem] flex flex-col justify-end">
+    <div className="flex flex-col gap-1.5 h-full bg-gradient-to-br from-slate-700 via-slate-800 to-zinc-900 rounded-xl p-3">
+      <div className="rounded-xl bg-black/40 text-white px-4 py-3 min-h-[4rem] flex flex-col justify-end">
         {calc.op && (
           <span className="text-xs text-slate-400 truncate text-right">
             {calc.prev} {calc.op}

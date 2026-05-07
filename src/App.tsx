@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { TileGrid } from './ui/TileGrid';
 import { Clock } from './ui/Clock';
+import { GoogleSignInGate } from './ui/GoogleSignInGate';
+import { useAuthStore, signOut } from './lib/google/auth';
 import { useTileStore } from './lib/store/tile-store';
 
 type MenuItem = { label: string; emoji: string; shortcut: string; action: () => void };
 
 export function App() {
   const addTile = useTileStore((s) => s.addTile);
+  const profile = useAuthStore((s) => s.profile);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -19,6 +22,7 @@ export function App() {
     { label: 'Tasks',     emoji: '✅', shortcut: 'T', action: () => addTile({ kind: 'todo',        id: crypto.randomUUID(), provider: 'google-tasks' }) },
     { label: 'Drive',     emoji: '📁', shortcut: 'D', action: () => addTile({ kind: 'gdrive',      id: crypto.randomUUID() }) },
     { label: 'News',      emoji: '📰', shortcut: 'N', action: () => addTile({ kind: 'rss',         id: crypto.randomUUID(), feedUrl: '', label: 'News' }) },
+    { label: 'AI Chat',   emoji: '🤖', shortcut: 'A', action: () => addTile({ kind: 'ai',          id: crypto.randomUUID(), provider: 'openai' }) },
   ];
 
   useEffect(() => {
@@ -44,50 +48,78 @@ export function App() {
   }, [menuOpen]);
 
   return (
-    <div className="min-h-screen bg-slate-400">
-      <header className="sticky top-0 z-10 grid grid-cols-3 items-center px-6 py-4 bg-slate-900 border-b-4 border-blue-500 shadow-2xl">
-        <Clock />
-        <h1 className="text-center text-xl font-bold text-white tracking-widest font-mono">
-          &lt;Grandpa Project /&gt;
-        </h1>
-        <div className="flex justify-end" ref={menuRef}>
-          <div className="relative">
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-expanded={menuOpen}
-              aria-haspopup="menu"
-              aria-label="Add tile"
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white rounded-xl font-semibold text-sm shadow-lg transition-all"
-            >
-              <span className={`text-lg leading-none transition-transform duration-200 ${menuOpen ? 'rotate-45' : ''}`}>+</span>
-              Add tile
-            </button>
-
-            {menuOpen && (
-              <div
-                role="menu"
-                className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl py-2 z-50"
-              >
-                {menuItems.map((item) => (
-                  <button
-                    key={item.label}
-                    role="menuitem"
-                    onClick={() => { item.action(); setMenuOpen(false); }}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-200 hover:bg-slate-700 transition-colors"
-                  >
-                    <span className="text-base w-6 text-center">{item.emoji}</span>
-                    <span className="flex-1 font-medium text-left">{item.label}</span>
-                    <kbd className="text-xs text-slate-500 font-mono bg-slate-800 rounded px-1.5 py-0.5">Alt+{item.shortcut}</kbd>
-                  </button>
-                ))}
+    <GoogleSignInGate>
+      <div className="min-h-screen bg-slate-400">
+        <header className="sticky top-0 z-10 grid grid-cols-3 items-center px-6 py-4 bg-slate-900 border-b-4 border-blue-500 shadow-2xl">
+          <Clock />
+          <h1 className="text-center text-xl font-bold text-white tracking-widest font-mono">
+            &lt;Grandpa Project /&gt;
+          </h1>
+          <div className="flex items-center justify-end gap-3" ref={menuRef}>
+            {/* User avatar + sign-out */}
+            {profile && (
+              <div className="flex items-center gap-2">
+                {profile.picture ? (
+                  <img
+                    src={profile.picture}
+                    alt={profile.name}
+                    title={profile.name}
+                    referrerPolicy="no-referrer"
+                    className="w-8 h-8 rounded-full border-2 border-slate-600"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white text-sm font-bold" title={profile.name}>
+                    {profile.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <button
+                  onClick={signOut}
+                  className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white text-xs font-medium rounded-lg transition-colors"
+                >
+                  Sign out
+                </button>
               </div>
             )}
+
+            {/* Add tile menu */}
+            <div className="relative">
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-expanded={menuOpen}
+                aria-haspopup="menu"
+                aria-label="Add tile"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white rounded-xl font-semibold text-sm shadow-lg transition-all"
+              >
+                <span className={`text-lg leading-none transition-transform duration-200 ${menuOpen ? 'rotate-45' : ''}`}>+</span>
+                Add tile
+              </button>
+
+              {menuOpen && (
+                <div
+                  role="menu"
+                  className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl py-2 z-50"
+                >
+                  {menuItems.map((item) => (
+                    <button
+                      key={item.label}
+                      role="menuitem"
+                      onClick={() => { item.action(); setMenuOpen(false); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-200 hover:bg-slate-700 transition-colors"
+                    >
+                      <span className="text-base w-6 text-center">{item.emoji}</span>
+                      <span className="flex-1 font-medium text-left">{item.label}</span>
+                      <kbd className="text-xs text-slate-500 font-mono bg-slate-800 rounded px-1.5 py-0.5">Alt+{item.shortcut}</kbd>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+        </header>
+        <div className="p-4">
+          <TileGrid />
         </div>
-      </header>
-      <div className="p-4">
-        <TileGrid />
       </div>
-    </div>
+    </GoogleSignInGate>
   );
 }

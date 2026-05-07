@@ -60,6 +60,14 @@ export type BookmarksTile = {
   links: BookmarkLink[];
 };
 
+export type AiTile = {
+  kind: 'ai';
+  id: string;
+  provider: 'openai' | 'anthropic';
+  model?: string;
+  systemPrompt?: string;
+};
+
 export type Tile =
   | LauncherTile
   | CalculatorTile
@@ -68,4 +76,5 @@ export type Tile =
   | GCalTile
   | GDriveTile
   | RssTile
-  | BookmarksTile;
+  | BookmarksTile
+  | AiTile;
