@@ -5,6 +5,7 @@ import { CalculatorTile } from '../tiles/calculator/CalculatorTile';
 import { WeatherTile } from '../tiles/weather/WeatherTile';
 import { GoogleCalendarTile } from '../tiles/google-calendar/GoogleCalendarTile';
 import { GoogleTasksTile } from '../tiles/google-tasks/GoogleTasksTile';
+import { GoogleDriveTile } from '../tiles/google-drive/GoogleDriveTile';
 
 export const TILE_LABELS: Record<Tile['kind'], string> = {
   launcher: 'Launcher',
@@ -28,6 +29,8 @@ export function renderTile(tile: Tile): ReactNode {
       return <GoogleCalendarTile tile={tile} />;
     case 'todo':
       return <GoogleTasksTile tile={tile} />;
+    case 'gdrive':
+      return <GoogleDriveTile />;
     default:
       return (
         <div className="flex items-center justify-center h-full text-sm text-slate-400">
