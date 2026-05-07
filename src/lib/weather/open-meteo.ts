@@ -6,6 +6,9 @@ export type WeatherCoordinates = {
 export type WeatherResponse = {
   current: {
     temperature_2m: number;
+    apparent_temperature: number;
+    relative_humidity_2m: number;
+    wind_speed_10m: number;
     weather_code: number;
   };
   daily: {
@@ -13,6 +16,7 @@ export type WeatherResponse = {
     weather_code: number[];
     temperature_2m_max: number[];
     temperature_2m_min: number[];
+    precipitation_probability_max: number[];
   };
 };
 
@@ -30,8 +34,8 @@ export function createOpenMeteoForecastUrl({ latitude, longitude }: WeatherCoord
   const params = new URLSearchParams({
     latitude: latitude.toString(),
     longitude: longitude.toString(),
-    current: 'temperature_2m,weather_code',
-    daily: 'weather_code,temperature_2m_max,temperature_2m_min',
+    current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code',
+    daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
     timezone: 'auto',
     forecast_days: '3',
   });

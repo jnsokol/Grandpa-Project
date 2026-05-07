@@ -50,6 +50,8 @@ export function TileGrid() {
       onLayoutChange={handleLayoutChange}
       margin={[16, 16]}
       resizeHandle={ResizeHandle}
+      isBounded
+      compactType="vertical"
     >
       {tiles.map((tile) => (
         <div key={tile.id} className="relative rounded-2xl overflow-hidden">
