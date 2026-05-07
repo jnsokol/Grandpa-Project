@@ -43,7 +43,7 @@ export function App() {
   }, [menuOpen]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
+    <div className="min-h-screen bg-gradient-to-br from-slate-200 to-slate-300">
       <header className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-white/80 backdrop-blur border-b border-slate-200 shadow-sm">
         <Clock />
         <div className="relative" ref={menuRef}>
