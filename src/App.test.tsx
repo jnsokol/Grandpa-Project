@@ -3,11 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
-  it('renders the phase 0 dashboard foundation', () => {
+  it('renders the header with Today heading and add tile buttons', () => {
     render(<App />);
-
     expect(screen.getByRole('heading', { name: 'Today' })).toBeInTheDocument();
-    expect(screen.getByText('Google Tasks')).toBeInTheDocument();
-    expect(screen.queryByText('Gmail')).not.toBeInTheDocument();
+    expect(screen.getByText('+ Launcher')).toBeInTheDocument();
+    expect(screen.getByText('+ Calculator')).toBeInTheDocument();
   });
 });

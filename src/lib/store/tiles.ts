@@ -1,0 +1,56 @@
+export type LauncherTile = {
+  kind: 'launcher';
+  id: string;
+  label: string;
+  url: string;
+  icon?: string;
+};
+
+export type CalculatorTile = {
+  kind: 'calculator';
+  id: string;
+};
+
+export type TodoTile = {
+  kind: 'todo';
+  id: string;
+  provider: 'google-tasks';
+  taskListId?: string;
+};
+
+export type WeatherTile = {
+  kind: 'weather';
+  id: string;
+  locationMode: 'geolocation' | 'saved';
+  lat?: number;
+  lon?: number;
+  label?: string;
+};
+
+export type GCalTile = {
+  kind: 'gcal';
+  id: string;
+  calendarId?: string;
+};
+
+export type GDriveTile = {
+  kind: 'gdrive';
+  id: string;
+  folderId?: string;
+};
+
+export type RssTile = {
+  kind: 'rss';
+  id: string;
+  feedUrl: string;
+  label: string;
+};
+
+export type Tile =
+  | LauncherTile
+  | CalculatorTile
+  | TodoTile
+  | WeatherTile
+  | GCalTile
+  | GDriveTile
+  | RssTile;
