@@ -1,0 +1,17 @@
+{
+  "name": "Personal Dashboard",
+  "short_name": "Dashboard",
+  "description": "Personal and family tile dashboard with weather, Google Calendar, Tasks, Drive, and news.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e2e8f0",
+  "theme_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
