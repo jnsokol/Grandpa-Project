@@ -3,6 +3,8 @@ export const googleScopes = {
   calendarReadonly: 'https://www.googleapis.com/auth/calendar.readonly',
   tasks: 'https://www.googleapis.com/auth/tasks',
   driveReadonly: 'https://www.googleapis.com/auth/drive.readonly',
+  gmailReadonly: 'https://www.googleapis.com/auth/gmail.readonly',
+  gmailSend: 'https://www.googleapis.com/auth/gmail.send',
 } as const;
 
 export const ALL_GOOGLE_SCOPES = [
@@ -12,4 +14,6 @@ export const ALL_GOOGLE_SCOPES = [
   googleScopes.calendarReadonly,
   googleScopes.tasks,
   googleScopes.driveReadonly,
+  googleScopes.gmailReadonly,
+  googleScopes.gmailSend,
 ].join(' ');

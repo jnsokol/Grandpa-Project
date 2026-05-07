@@ -23,6 +23,7 @@ export function App() {
     { label: 'Drive',     emoji: '📁', shortcut: 'D', action: () => addTile({ kind: 'gdrive',      id: crypto.randomUUID() }) },
     { label: 'News',      emoji: '📰', shortcut: 'N', action: () => addTile({ kind: 'rss',         id: crypto.randomUUID(), feedUrl: '', label: 'News' }) },
     { label: 'AI Chat',   emoji: '🤖', shortcut: 'A', action: () => addTile({ kind: 'ai',          id: crypto.randomUUID(), provider: 'openai' }) },
+    { label: 'Gmail',     emoji: '✉️', shortcut: 'M', action: () => addTile({ kind: 'gmail',        id: crypto.randomUUID() }) },
   ];
 
   useEffect(() => {

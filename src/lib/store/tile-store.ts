@@ -13,6 +13,7 @@ const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   gdrive:     { w: 3, h: 3 },
   rss:        { w: 4, h: 4 },
   ai:         { w: 4, h: 5 },
+  gmail:      { w: 4, h: 5 },
 };
 
 const DEFAULT_TILES: Tile[] = [

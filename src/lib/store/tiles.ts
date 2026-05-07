@@ -68,6 +68,11 @@ export type AiTile = {
   systemPrompt?: string;
 };
 
+export type GmailTile = {
+  kind: 'gmail';
+  id: string;
+};
+
 export type Tile =
   | LauncherTile
   | CalculatorTile
@@ -77,4 +82,5 @@ export type Tile =
   | GDriveTile
   | RssTile
   | BookmarksTile
-  | AiTile;
+  | AiTile
+  | GmailTile;
