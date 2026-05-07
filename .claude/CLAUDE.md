@@ -1,4 +1,4 @@
-# Project: Personal / Family Dashboard
+# Project: Personal / Dashboard
 
 ## What This Is
 A browser-based tile dashboard for personal, family, and later other-user use. React + Vite + TypeScript + Tailwind. Deployed to Cloudflare Pages. Mostly client-side; one optional Worker for RSS/news proxy.
