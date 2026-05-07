@@ -3,6 +3,7 @@ import type { Tile } from './store/tiles';
 import { LauncherTile } from '../tiles/launcher/LauncherTile';
 import { CalculatorTile } from '../tiles/calculator/CalculatorTile';
 import { WeatherTile } from '../tiles/weather/WeatherTile';
+import { GoogleCalendarTile } from '../tiles/google-calendar/GoogleCalendarTile';
 
 export const TILE_LABELS: Record<Tile['kind'], string> = {
   launcher: 'Launcher',
@@ -22,6 +23,8 @@ export function renderTile(tile: Tile): ReactNode {
       return <CalculatorTile tile={tile} />;
     case 'weather':
       return <WeatherTile tile={tile} />;
+    case 'gcal':
+      return <GoogleCalendarTile tile={tile} />;
     default:
       return (
         <div className="flex items-center justify-center h-full text-sm text-slate-400">
