@@ -23,6 +23,19 @@ const ResizeHandle = (
   </div>
 );
 
+function hasOverlaps(layout: Layout[]): boolean {
+  for (let i = 0; i < layout.length; i++) {
+    for (let j = i + 1; j < layout.length; j++) {
+      const a = layout[i];
+      const b = layout[j];
+      if (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 export function TileGrid() {
   const pages = useTileStore((s) => s.pages);
   const currentPageId = useTileStore((s) => s.currentPageId);
@@ -33,6 +46,22 @@ export function TileGrid() {
   const currentPage = pages.find((p) => p.id === currentPageId);
   const tiles = currentPage?.tiles ?? [];
   const layouts = currentPage?.layouts ?? {};
+
+  // Auto-repair overlapping layouts on mount or when tiles/layouts change
+  useEffect(() => {
+    const lgLayout = layouts.lg ?? [];
+    if (lgLayout.length > 1 && hasOverlaps(lgLayout)) {
+      let y = 0;
+      const fixed = tiles.map((tile) => {
+        const existing = lgLayout.find((l) => l.i === tile.id);
+        const item: Layout = { i: tile.id, x: 0, y, w: existing?.w ?? 3, h: existing?.h ?? 3 };
+        y += item.h;
+        return item;
+      });
+      updateLayouts({ lg: fixed });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPageId]);
 
   const prevCount = useRef(tiles.length);
   useEffect(() => {
@@ -64,8 +93,11 @@ export function TileGrid() {
     return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
   }
 
+  // Only persist the lg layout — other breakpoints are auto-derived by RGL
   function handleLayoutChange(_current: unknown, allLayouts: Layouts) {
-    updateLayouts(allLayouts);
+    if (allLayouts.lg) {
+      updateLayouts({ lg: allLayouts.lg });
+    }
   }
 
   function handleDragStart() {
@@ -126,7 +158,6 @@ export function TileGrid() {
         resizeHandle={ResizeHandle}
         compactType={null}
         preventCollision
-        measureBeforeMount
       >
         {tiles.map((tile, i) => (
           <div key={tile.id} className="relative rounded-2xl overflow-hidden tile-enter" style={{ animationDelay: `${i * 25}ms` }}>

@@ -155,7 +155,7 @@ export const useTileStore = create<TileStore>()(
     }),
     {
       name: 'dashboard-tiles',
-      version: 6,
+      version: 7,
       migrate: (persistedState) => {
         const s = persistedState as { pages?: Page[]; currentPageId?: string; locked?: boolean; bg?: BgConfig; onboardingDone?: boolean };
         if (s?.pages?.length) {
