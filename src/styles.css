@@ -22,9 +22,9 @@ select {
   display: none !important;
 }
 
-/* Drag placeholder — match tile shape and use a neutral color */
+/* Drag placeholder — neutral grey, no blue */
 .react-grid-layout .react-grid-placeholder {
-  background: #3b82f6 !important;
-  opacity: 0.25 !important;
+  background: #71717a !important;
+  opacity: 0.15 !important;
   border-radius: 1rem !important;
 }
