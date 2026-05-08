@@ -65,6 +65,13 @@ export type GmailTile = {
   id: string;
 };
 
+export type NotesTile = {
+  kind: 'notes';
+  id: string;
+  title: string;
+  content: string;
+};
+
 export type Tile =
   | LauncherTile
   | CalculatorTile
@@ -74,4 +81,5 @@ export type Tile =
   | GDriveTile
   | RssTile
   | BookmarksTile
-  | GmailTile;
+  | GmailTile
+  | NotesTile;

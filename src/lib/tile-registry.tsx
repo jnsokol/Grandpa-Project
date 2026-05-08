@@ -9,6 +9,7 @@ import { GoogleDriveTile } from '../tiles/google-drive/GoogleDriveTile';
 import { NewsTile } from '../tiles/news/NewsTile';
 import { BookmarksTile } from '../tiles/bookmarks/BookmarksTile';
 import { GmailTile } from '../tiles/gmail/GmailTile';
+import { NotesTile } from '../tiles/notes/NotesTile';
 
 export const TILE_LABELS: Record<Tile['kind'], string> = {
   launcher: 'Launcher',
@@ -20,6 +21,7 @@ export const TILE_LABELS: Record<Tile['kind'], string> = {
   rss: 'News',
   bookmarks: 'Bookmarks',
   gmail: 'Gmail',
+  notes: 'Sticky Notes',
 };
 
 export function renderTile(tile: Tile): ReactNode {
@@ -42,6 +44,8 @@ export function renderTile(tile: Tile): ReactNode {
       return <BookmarksTile tile={tile} />;
     case 'gmail':
       return <GmailTile />;
+    case 'notes':
+      return <NotesTile tile={tile} />;
     default:
       return (
         <div className="flex items-center justify-center h-full text-sm text-slate-400">

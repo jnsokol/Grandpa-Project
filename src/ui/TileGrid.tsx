@@ -23,7 +23,15 @@ const ResizeHandle = (
 );
 
 export function TileGrid() {
-  const { tiles, layouts, removeTile, updateLayouts } = useTileStore();
+  const pages = useTileStore((s) => s.pages);
+  const currentPageId = useTileStore((s) => s.currentPageId);
+  const removeTile = useTileStore((s) => s.removeTile);
+  const updateLayouts = useTileStore((s) => s.updateLayouts);
+
+  const currentPage = pages.find((p) => p.id === currentPageId);
+  const tiles = currentPage?.tiles ?? [];
+  const layouts = currentPage?.layouts ?? {};
+
   const prevCount = useRef(tiles.length);
   useEffect(() => {
     if (tiles.length > prevCount.current) {
