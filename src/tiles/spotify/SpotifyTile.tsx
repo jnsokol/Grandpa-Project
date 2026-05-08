@@ -113,7 +113,8 @@ export function SpotifyTile() {
 
   if (!track) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-2 p-4 text-center">
+      <div className="flex flex-col items-center justify-center h-full gap-2 p-4 text-center relative">
+        <button onClick={signOutSpotify} className="absolute top-2 right-2 text-zinc-700 hover:text-zinc-400 text-xs transition-colors" title="Disconnect">✕</button>
         <p className="text-3xl">🎵</p>
         <p className="text-zinc-500 text-sm">Nothing playing</p>
         <button onClick={fetchPlayback} className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors">Refresh</button>
