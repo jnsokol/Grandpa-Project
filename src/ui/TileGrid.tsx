@@ -44,6 +44,23 @@ export function TileGrid() {
   const [overTrash, setOverTrash] = useState(false);
   const trashRef = useRef<HTMLDivElement>(null);
 
+  function getClientPos(e: MouseEvent | TouchEvent): { x: number; y: number } {
+    if ('changedTouches' in e && e.changedTouches.length > 0) {
+      return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    }
+    if ('touches' in e && e.touches.length > 0) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: (e as MouseEvent).clientX, y: (e as MouseEvent).clientY };
+  }
+
+  function isOverTrash(e: MouseEvent | TouchEvent): boolean {
+    if (!trashRef.current) return false;
+    const { x, y } = getClientPos(e);
+    const rect = trashRef.current.getBoundingClientRect();
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+  }
+
   function handleLayoutChange(_current: unknown, allLayouts: Layouts) {
     updateLayouts(allLayouts);
   }
@@ -61,16 +78,8 @@ export function TileGrid() {
   ) {
     setDragging(false);
     setOverTrash(false);
-    if (trashRef.current) {
-      const rect = trashRef.current.getBoundingClientRect();
-      if (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      ) {
-        removeTile(oldItem.i);
-      }
+    if (isOverTrash(e as unknown as MouseEvent | TouchEvent)) {
+      removeTile(oldItem.i);
     }
   }
 
@@ -81,15 +90,7 @@ export function TileGrid() {
     _placeholder: Layout,
     e: MouseEvent,
   ) {
-    if (trashRef.current) {
-      const rect = trashRef.current.getBoundingClientRect();
-      setOverTrash(
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom,
-      );
-    }
+    setOverTrash(isOverTrash(e as unknown as MouseEvent | TouchEvent));
   }
 
   if (tiles.length === 0) {
