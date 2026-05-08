@@ -91,4 +91,10 @@ export type Tile =
   | BookmarksTile
   | GmailTile
   | NotesTile
-  | CountdownTile;
+  | CountdownTile
+  | SpotifyTile;
+
+export type SpotifyTile = {
+  kind: 'spotify';
+  id: string;
+};

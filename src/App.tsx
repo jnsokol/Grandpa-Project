@@ -3,8 +3,14 @@ import { TileGrid } from './ui/TileGrid';
 import { Clock } from './ui/Clock';
 import { GoogleSignInGate } from './ui/GoogleSignInGate';
 import { NotificationPanel } from './ui/NotificationPanel';
+import { BackgroundPicker } from './ui/BackgroundPicker';
+import { QuickNotePopover } from './ui/QuickNotePopover';
+import { SearchPanel } from './ui/SearchPanel';
+import { OnboardingFlow } from './ui/OnboardingFlow';
 import { useAuthStore, signOut } from './lib/google/auth';
 import { useTileStore } from './lib/store/tile-store';
+import { handleSpotifyCallback } from './lib/spotify/auth';
+import { bgStyle } from './lib/background';
 import type { Page } from './lib/store/tile-store';
 
 type MenuItem = { label: string; emoji: string; shortcut: string; action: () => void };
@@ -14,16 +20,23 @@ export function App() {
   const pages = useTileStore((s) => s.pages);
   const currentPageId = useTileStore((s) => s.currentPageId);
   const locked = useTileStore((s) => s.locked);
+  const bg = useTileStore((s) => s.bg);
+  const onboardingDone = useTileStore((s) => s.onboardingDone);
   const addPage = useTileStore((s) => s.addPage);
   const removePage = useTileStore((s) => s.removePage);
   const renamePage = useTileStore((s) => s.renamePage);
   const setCurrentPage = useTileStore((s) => s.setCurrentPage);
   const toggleLock = useTileStore((s) => s.toggleLock);
+  const setBg = useTileStore((s) => s.setBg);
   const replaceDashboard = useTileStore((s) => s.replaceDashboard);
 
   const profile = useAuthStore((s) => s.profile);
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [bgOpen, setBgOpen] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const moreRef = useRef<HTMLDivElement>(null);
@@ -32,11 +45,34 @@ export function App() {
   const [renamingPageId, setRenamingPageId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
 
+  const allEmpty = pages.every((p) => p.tiles.length === 0);
+  const showOnboarding = !onboardingDone && allEmpty;
+
+  // Handle Spotify OAuth callback
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code) {
+      window.history.replaceState({}, '', '/');
+      handleSpotifyCallback(code).catch(console.error);
+    }
+  }, []);
+
+  // ⌘K / Ctrl+K to open search
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); setSearchOpen(true); }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
+
   const menuItems: MenuItem[] = [
     { label: 'Bookmarks', emoji: '🔖', shortcut: 'B', action: () => addTile({ kind: 'bookmarks',  id: crypto.randomUUID(), title: 'Links', links: [] }) },
     { label: 'Launcher',  emoji: '🔗', shortcut: 'L', action: () => addTile({ kind: 'launcher',   id: crypto.randomUUID(), label: 'New Link', url: '' }) },
     { label: 'Notes',     emoji: '📝', shortcut: 'O', action: () => addTile({ kind: 'notes',      id: crypto.randomUUID(), title: 'Note', content: '' }) },
     { label: 'Countdown', emoji: '⏳', shortcut: 'K', action: () => addTile({ kind: 'countdown',  id: crypto.randomUUID(), label: '', targetDate: '', emoji: '🎯' }) },
+    { label: 'Spotify',   emoji: '🎵', shortcut: 'S', action: () => addTile({ kind: 'spotify',    id: crypto.randomUUID() }) },
     { label: 'Calculator',emoji: '🔢', shortcut: 'C', action: () => addTile({ kind: 'calculator', id: crypto.randomUUID() }) },
     { label: 'Weather',   emoji: '🌤️', shortcut: 'W', action: () => addTile({ kind: 'weather',    id: crypto.randomUUID(), locationMode: 'geolocation' }) },
     { label: 'Calendar',  emoji: '📅', shortcut: 'G', action: () => addTile({ kind: 'gcal',        id: crypto.randomUUID() }) },
@@ -102,9 +138,12 @@ export function App() {
     setMoreOpen(false);
   }
 
+  // Suppress unused setBg warning — it's used by BackgroundPicker through the store
+  void setBg;
+
   return (
     <GoogleSignInGate>
-      <div className="min-h-screen bg-[#080810]" style={{ backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 60%)' }}>
+      <div className="min-h-screen transition-colors duration-500" style={bgStyle(bg)}>
 
         {/* ── Header ── */}
         <header className="sticky top-0 z-20 bg-[#0d0d14]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.04),0_4px_32px_rgba(0,0,0,0.5)]">
@@ -126,7 +165,7 @@ export function App() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+            <div className="flex items-center gap-2 sm:gap-2.5 ml-auto">
 
               {profile && (
                 <div className="flex items-center gap-2">
@@ -135,12 +174,12 @@ export function App() {
                       referrerPolicy="no-referrer"
                       className="w-8 h-8 rounded-full ring-2 ring-zinc-700 hover:ring-zinc-500 transition-all" />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-white text-sm font-bold ring-2 ring-zinc-600" title={profile.name}>
+                    <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-white text-sm font-bold ring-2 ring-zinc-600">
                       {profile.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <button onClick={signOut}
-                    className="hidden sm:block px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.10] border border-white/[0.08] hover:border-white/[0.15] text-zinc-400 hover:text-white text-xs font-medium transition-all">
+                    className="hidden sm:block px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.10] border border-white/[0.08] text-zinc-400 hover:text-white text-xs font-medium transition-all">
                     Sign out
                   </button>
                 </div>
@@ -148,35 +187,48 @@ export function App() {
 
               {profile && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
 
-              {/* Bell / notifications */}
-              <button
-                onClick={() => setNotifOpen((v) => !v)}
-                title="Notifications"
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all"
-              >
+              {/* Search */}
+              <button onClick={() => setSearchOpen(true)} title="Search tiles (⌘K)"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all">
+                🔍
+              </button>
+
+              {/* Quick note */}
+              <button onClick={() => setNoteOpen((v) => !v)} title="Quick note"
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                  noteOpen ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border-white/[0.08]'
+                }`}>
+                ✏️
+              </button>
+
+              {/* Notifications */}
+              <button onClick={() => setNotifOpen((v) => !v)} title="Notifications"
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                  notifOpen ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' : 'bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border-white/[0.08]'
+                }`}>
                 🔔
               </button>
 
+              {/* Background */}
+              <button onClick={() => setBgOpen((v) => !v)} title="Background"
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                  bgOpen ? 'bg-white/[0.15] text-white border-white/[0.20]' : 'bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border-white/[0.08]'
+                }`}>
+                🎨
+              </button>
+
               {/* Lock */}
-              <button
-                onClick={toggleLock}
-                title={locked ? 'Unlock dashboard' : 'Lock dashboard'}
+              <button onClick={toggleLock} title={locked ? 'Unlock dashboard' : 'Lock dashboard'}
                 className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm transition-all ${
-                  locked
-                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30'
-                    : 'bg-white/[0.06] text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.10] border border-white/[0.08]'
-                }`}
-              >
+                  locked ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30' : 'bg-white/[0.06] text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.10] border border-white/[0.08]'
+                }`}>
                 {locked ? '🔒' : '🔓'}
               </button>
 
               {/* More (export/import) */}
               <div className="relative" ref={moreRef}>
-                <button
-                  onClick={() => setMoreOpen((v) => !v)}
-                  title="More options"
-                  className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all font-bold"
-                >
+                <button onClick={() => setMoreOpen((v) => !v)} title="More options"
+                  className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all font-bold">
                   ⋯
                 </button>
                 {moreOpen && (
@@ -194,7 +246,7 @@ export function App() {
                 )}
               </div>
 
-              {profile && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
+              {!locked && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
 
               {/* Add tile */}
               <div className={`relative ${locked ? 'hidden' : ''}`} ref={menuRef}>
@@ -215,7 +267,7 @@ export function App() {
 
                 {menuOpen && (
                   <div role="menu"
-                    className="absolute right-0 top-full mt-2 w-52 sm:w-56 rounded-2xl bg-[#0d0d14]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.8)] py-1.5 z-50 overflow-hidden">
+                    className="absolute right-0 top-full mt-2 w-52 sm:w-56 rounded-2xl bg-[#0d0d14]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.8)] py-1.5 z-50 overflow-hidden animate-fade-in">
                     {menuItems.map((item) => (
                       <button key={item.label} role="menuitem"
                         onClick={() => { item.action(); setMenuOpen(false); }}
@@ -236,59 +288,49 @@ export function App() {
             {pages.map((page) => (
               <div key={page.id} className="relative group flex items-center shrink-0">
                 {renamingPageId === page.id ? (
-                  <input
-                    autoFocus
-                    value={renameValue}
+                  <input autoFocus value={renameValue}
                     onChange={(e) => setRenameValue(e.target.value)}
                     onBlur={() => commitRename(page.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') commitRename(page.id);
-                      if (e.key === 'Escape') setRenamingPageId(null);
-                    }}
-                    className="px-2 py-1 rounded-lg bg-white/[0.10] text-white text-xs font-medium outline-none border border-white/[0.20] w-24"
-                  />
+                    onKeyDown={(e) => { if (e.key === 'Enter') commitRename(page.id); if (e.key === 'Escape') setRenamingPageId(null); }}
+                    className="px-2 py-1 rounded-lg bg-white/[0.10] text-white text-xs font-medium outline-none border border-white/[0.20] w-24" />
                 ) : (
                   <button
                     onClick={() => setCurrentPage(page.id)}
                     onDoubleClick={() => { setRenamingPageId(page.id); setRenameValue(page.name); }}
                     className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${pages.length > 1 ? 'pr-6' : ''} ${
-                      currentPageId === page.id
-                        ? 'bg-white/[0.12] text-white'
-                        : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.06]'
+                      currentPageId === page.id ? 'bg-white/[0.12] text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.06]'
                     }`}
                   >
                     {page.name}
                   </button>
                 )}
                 {pages.length > 1 && renamingPageId !== page.id && (
-                  <button
-                    onClick={() => removePage(page.id)}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-all leading-none"
-                  >
+                  <button onClick={() => removePage(page.id)}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-all leading-none">
                     ×
                   </button>
                 )}
               </div>
             ))}
             {!locked && (
-              <button
-                onClick={addPage}
-                className="px-2 py-1 rounded-lg text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.06] text-xs transition-all shrink-0"
-                title="Add new page"
-              >
+              <button onClick={addPage}
+                className="px-2 py-1 rounded-lg text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.06] text-xs transition-all shrink-0" title="Add new page">
                 +
               </button>
             )}
           </div>
         </header>
 
-        {/* ── Grid ── */}
+        {/* ── Main content ── */}
         <div className="p-2 sm:p-6">
-          <TileGrid />
+          {showOnboarding ? <OnboardingFlow /> : <TileGrid />}
         </div>
 
-        {/* Notification panel */}
-        {notifOpen && <NotificationPanel onClose={() => setNotifOpen(false)} />}
+        {/* ── Overlays ── */}
+        {notifOpen  && <NotificationPanel  onClose={() => setNotifOpen(false)} />}
+        {bgOpen     && <BackgroundPicker   onClose={() => setBgOpen(false)} />}
+        {noteOpen   && <QuickNotePopover   onClose={() => setNoteOpen(false)} />}
+        {searchOpen && <SearchPanel        onClose={() => setSearchOpen(false)} />}
       </div>
     </GoogleSignInGate>
   );

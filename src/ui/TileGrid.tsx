@@ -98,16 +98,17 @@ export function TileGrid() {
 
   if (tiles.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-40 gap-4 text-center">
+      <div className="flex flex-col items-center justify-center py-40 gap-4 text-center animate-fade-in">
         <span className="text-6xl opacity-40">🧩</span>
-        <p className="text-zinc-400 font-semibold text-lg">Your dashboard is empty</p>
-        <p className="text-zinc-600 text-sm">Click <strong className="text-zinc-400">+ Add tile</strong> in the top-right to get started.</p>
+        <p className="text-zinc-400 font-semibold text-lg">This page is empty</p>
+        <p className="text-zinc-600 text-sm">Click <strong className="text-zinc-400">+ Add tile</strong> to get started.</p>
       </div>
     );
   }
 
   return (
     <>
+      <div key={currentPageId} className="page-switch">
       <ResponsiveGridLayout
         className="layout"
         layouts={layouts}
@@ -126,14 +127,15 @@ export function TileGrid() {
         compactType={null}
         preventCollision
       >
-        {tiles.map((tile) => (
-          <div key={tile.id} className="relative rounded-2xl overflow-hidden">
+        {tiles.map((tile, i) => (
+          <div key={tile.id} className="relative rounded-2xl overflow-hidden tile-enter" style={{ animationDelay: `${i * 25}ms` }}>
             <TileShell locked={locked} onSettings={() => setSettingsTileId(tile.id)}>
               {renderTile(tile)}
             </TileShell>
           </div>
         ))}
       </ResponsiveGridLayout>
+      </div>
 
       {settingsTileId && (
         <TileSettingsPanel tileId={settingsTileId} onClose={() => setSettingsTileId(null)} />

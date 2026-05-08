@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Layouts } from 'react-grid-layout';
 import type { Tile } from './tiles';
+import type { BgConfig } from '../background';
 
 export type Page = {
   id: string;
@@ -22,21 +23,28 @@ const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   gmail:      { w: 4, h: 5 },
   notes:      { w: 3, h: 4 },
   countdown:  { w: 2, h: 2 },
+  spotify:    { w: 3, h: 3 },
 };
 
 function makePage(name: string): Page {
   return { id: crypto.randomUUID(), name, tiles: [], layouts: {} };
 }
 
+const DEFAULT_BG: BgConfig = { presetId: 'indigo', imageUrl: '' };
+
 type TileStore = {
   pages: Page[];
   currentPageId: string;
   locked: boolean;
+  bg: BgConfig;
+  onboardingDone: boolean;
   addPage: () => void;
   removePage: (id: string) => void;
   renamePage: (id: string, name: string) => void;
   setCurrentPage: (id: string) => void;
   toggleLock: () => void;
+  setBg: (bg: BgConfig) => void;
+  dismissOnboarding: () => void;
   addTile: (tile: Tile) => void;
   removeTile: (id: string) => void;
   updateTile: (tile: Tile) => void;
@@ -52,8 +60,12 @@ export const useTileStore = create<TileStore>()(
       pages: [initialPage],
       currentPageId: initialPage.id,
       locked: false,
+      bg: DEFAULT_BG,
+      onboardingDone: false,
 
       toggleLock: () => set((state) => ({ locked: !state.locked })),
+      setBg: (bg) => set({ bg }),
+      dismissOnboarding: () => set({ onboardingDone: true }),
 
       addPage: () =>
         set((state) => {
@@ -65,8 +77,7 @@ export const useTileStore = create<TileStore>()(
         set((state) => {
           if (state.pages.length <= 1) return state;
           const newPages = state.pages.filter((p) => p.id !== id);
-          const newCurrentId =
-            state.currentPageId === id ? newPages[0].id : state.currentPageId;
+          const newCurrentId = state.currentPageId === id ? newPages[0].id : state.currentPageId;
           return { pages: newPages, currentPageId: newCurrentId };
         }),
 
@@ -84,7 +95,6 @@ export const useTileStore = create<TileStore>()(
           const page = state.pages[idx];
           const lgLayout = page.layouts.lg ?? [];
           const size = DEFAULT_SIZES[tile.kind];
-          // Shift every existing tile down to make room at the top
           const shifted = lgLayout.map((l) => ({ ...l, y: l.y + size.h }));
           const newPage: Page = {
             ...page,
@@ -96,7 +106,7 @@ export const useTileStore = create<TileStore>()(
           };
           const newPages = [...state.pages];
           newPages[idx] = newPage;
-          return { pages: newPages };
+          return { pages: newPages, onboardingDone: true };
         }),
 
       removeTile: (id) =>
