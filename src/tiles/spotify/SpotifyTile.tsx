@@ -37,6 +37,7 @@ export function SpotifyTile() {
   const [track, setTrack] = useState<Track | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [debug, setDebug] = useState('');
 
   const getToken = useCallback(async (): Promise<SpotifyToken | null> => {
     if (!token) return null;
@@ -47,19 +48,24 @@ export function SpotifyTile() {
 
   const fetchPlayback = useCallback(async () => {
     const t = await getToken();
-    if (!t) return;
+    if (!t) { setDebug('no token'); return; }
     try {
-      // Try full player state first; fall back to currently-playing if no active device (204)
       let res = await fetch('https://api.spotify.com/v1/me/player?additional_types=track,episode', {
         headers: { Authorization: `Bearer ${t.access_token}` },
       });
+      const s1 = res.status;
       if (res.status === 204) {
         res = await fetch('https://api.spotify.com/v1/me/player/currently-playing?additional_types=track,episode', {
           headers: { Authorization: `Bearer ${t.access_token}` },
         });
       }
+      const s2 = res.status;
+      setDebug(`player:${s1} curr:${s2}`);
       if (res.status === 204) { setTrack(null); setError(''); return; }
-      if (!res.ok) throw new Error(`Spotify API error ${res.status}`);
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`${res.status}: ${body.slice(0, 80)}`);
+      }
       const data = await res.json() as PlaybackState;
       if (!data.item) { setTrack(null); setError(''); return; }
       setTrack({
@@ -124,7 +130,8 @@ export function SpotifyTile() {
         <p className="text-3xl">🎵</p>
         <p className="text-zinc-500 text-sm">Nothing playing</p>
         <p className="text-zinc-700 text-xs leading-relaxed">Make sure Spotify is open<br/>and not in Private Session</p>
-        {error && <p className="text-red-400 text-xs">{error}</p>}
+        {error && <p className="text-red-400 text-xs break-all">{error}</p>}
+        {debug && <p className="text-zinc-800 text-[10px] font-mono">{debug}</p>}
         <button onClick={fetchPlayback} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors underline">Refresh</button>
       </div>
     );
