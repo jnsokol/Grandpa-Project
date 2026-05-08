@@ -94,20 +94,3 @@ select {
   animation: page-switch 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ── Gradient text utility ── */
-.gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 40%, #67e8f9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── Ambient glow orbs in background ── */
-.bg-orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
