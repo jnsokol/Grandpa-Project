@@ -26,7 +26,9 @@ export function TileGrid() {
   const { tiles, layouts, removeTile, updateLayouts } = useTileStore();
   const prevCount = useRef(tiles.length);
   useEffect(() => {
-    if (prevCount.current === 0 && tiles.length > 0) window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (tiles.length > prevCount.current) {
+      setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 50);
+    }
     prevCount.current = tiles.length;
   }, [tiles.length]);
 
