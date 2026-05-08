@@ -71,18 +71,22 @@ select {
   animation: page-switch 0.2s ease-out both;
 }
 
-/* Tile scrollbar — blends with the dark tile background */
-.tile-scroll::-webkit-scrollbar {
+/* Global scrollbar — thin and dark, blends with tile backgrounds */
+::-webkit-scrollbar {
   width: 3px;
   height: 3px;
 }
-.tile-scroll::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
-.tile-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.10);
   border-radius: 99px;
 }
-.tile-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.10) transparent;
 }
