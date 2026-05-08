@@ -114,12 +114,17 @@ export function App() {
 
             <Clock />
 
-            <h1
-              className="absolute left-1/2 -translate-x-1/2 text-xl sm:text-3xl text-white select-none whitespace-nowrap tracking-tight"
-              style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 900 }}
-            >
-              Grandpa Project
-            </h1>
+            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+              <h1
+                className="text-xl sm:text-3xl text-white select-none whitespace-nowrap tracking-tight leading-tight"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 900 }}
+              >
+                Grandpa Project
+              </h1>
+              <p className="text-zinc-600 text-[10px] font-light tracking-widest uppercase select-none whitespace-nowrap">
+                Everything you need
+              </p>
+            </div>
 
             <div className="flex items-center gap-2 sm:gap-3 ml-auto">
 
