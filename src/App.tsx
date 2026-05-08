@@ -147,7 +147,7 @@ export function App() {
       <div className="min-h-screen transition-colors duration-500" style={bgStyle(bg)}>
 
         {/* ── Header ── */}
-        <header className="sticky top-0 z-20 bg-[#0a0a10]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.03),0_4px_24px_rgba(0,0,0,0.6)]">
+        <header className="sticky top-0 z-20 bg-black/40 backdrop-blur-xl border-b border-white/[0.04] shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_8px_32px_rgba(0,0,0,0.6),0_1px_0_rgba(0,0,0,0.8)]">
 
           {/* Top row */}
           <div className="flex items-center justify-between px-4 sm:px-8 py-3">
