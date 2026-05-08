@@ -49,13 +49,19 @@ export function SpotifyTile() {
     const t = await getToken();
     if (!t) return;
     try {
-      const res = await fetch('https://api.spotify.com/v1/me/player', {
+      // Try full player state first; fall back to currently-playing if no active device (204)
+      let res = await fetch('https://api.spotify.com/v1/me/player?additional_types=track,episode', {
         headers: { Authorization: `Bearer ${t.access_token}` },
       });
-      if (res.status === 204) { setTrack(null); return; }
-      if (!res.ok) throw new Error(`${res.status}`);
+      if (res.status === 204) {
+        res = await fetch('https://api.spotify.com/v1/me/player/currently-playing?additional_types=track,episode', {
+          headers: { Authorization: `Bearer ${t.access_token}` },
+        });
+      }
+      if (res.status === 204) { setTrack(null); setError(''); return; }
+      if (!res.ok) throw new Error(`Spotify API error ${res.status}`);
       const data = await res.json() as PlaybackState;
-      if (!data.item) { setTrack(null); return; }
+      if (!data.item) { setTrack(null); setError(''); return; }
       setTrack({
         name: data.item.name,
         artist: data.item.artists.map((a) => a.name).join(', '),
@@ -117,7 +123,9 @@ export function SpotifyTile() {
         <button onClick={signOutSpotify} className="absolute top-2 right-2 text-zinc-700 hover:text-zinc-400 text-xs transition-colors" title="Disconnect">✕</button>
         <p className="text-3xl">🎵</p>
         <p className="text-zinc-500 text-sm">Nothing playing</p>
-        <button onClick={fetchPlayback} className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors">Refresh</button>
+        <p className="text-zinc-700 text-xs leading-relaxed">Make sure Spotify is open<br/>and not in Private Session</p>
+        {error && <p className="text-red-400 text-xs">{error}</p>}
+        <button onClick={fetchPlayback} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors underline">Refresh</button>
       </div>
     );
   }
