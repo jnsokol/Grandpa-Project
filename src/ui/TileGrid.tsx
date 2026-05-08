@@ -6,6 +6,7 @@ import 'react-resizable/css/styles.css';
 import { useTileStore } from '../lib/store/tile-store';
 import { renderTile } from '../lib/tile-registry';
 import { TileShell } from './TileShell';
+import { TileSettingsPanel } from './TileSettingsPanel';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -41,6 +42,7 @@ export function TileGrid() {
     prevCount.current = tiles.length;
   }, [tiles.length]);
 
+  const [settingsTileId, setSettingsTileId] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
   const [overTrash, setOverTrash] = useState(false);
   const trashRef = useRef<HTMLDivElement>(null);
@@ -126,12 +128,16 @@ export function TileGrid() {
       >
         {tiles.map((tile) => (
           <div key={tile.id} className="relative rounded-2xl overflow-hidden">
-            <TileShell locked={locked}>
+            <TileShell locked={locked} onSettings={() => setSettingsTileId(tile.id)}>
               {renderTile(tile)}
             </TileShell>
           </div>
         ))}
       </ResponsiveGridLayout>
+
+      {settingsTileId && (
+        <TileSettingsPanel tileId={settingsTileId} onClose={() => setSettingsTileId(null)} />
+      )}
 
       {/* Drag-to-remove trash zone */}
       {dragging && !locked && (

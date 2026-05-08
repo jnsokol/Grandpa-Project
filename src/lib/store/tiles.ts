@@ -72,6 +72,14 @@ export type NotesTile = {
   content: string;
 };
 
+export type CountdownTile = {
+  kind: 'countdown';
+  id: string;
+  label: string;
+  targetDate: string; // YYYY-MM-DD
+  emoji: string;
+};
+
 export type Tile =
   | LauncherTile
   | CalculatorTile
@@ -82,4 +90,5 @@ export type Tile =
   | RssTile
   | BookmarksTile
   | GmailTile
-  | NotesTile;
+  | NotesTile
+  | CountdownTile;

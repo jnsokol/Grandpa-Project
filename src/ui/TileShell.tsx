@@ -1,16 +1,17 @@
 import type { ReactNode } from 'react';
 
-type Props = { children: ReactNode; locked?: boolean };
+type Props = { children: ReactNode; locked?: boolean; onSettings?: () => void };
 
-export function TileShell({ children, locked }: Props) {
+export function TileShell({ children, locked, onSettings }: Props) {
   return (
-    <div className="h-full rounded-2xl overflow-hidden relative
+    <div className="group h-full rounded-2xl overflow-hidden relative
       bg-white/[0.04] backdrop-blur-2xl
       border border-white/[0.08]
       shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]
       hover:bg-white/[0.06] hover:border-white/[0.12]
       hover:shadow-[0_12px_40px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)]
       hover:-translate-y-0.5 transition-all duration-200">
+
       {!locked && (
         <div
           className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-grab active:cursor-grabbing select-none z-10 flex items-center justify-center"
@@ -23,6 +24,18 @@ export function TileShell({ children, locked }: Props) {
           </div>
         </div>
       )}
+
+      {onSettings && !locked && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onSettings(); }}
+          className="absolute top-1 right-1 z-20 w-6 h-6 rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-zinc-500 hover:text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all"
+          aria-label="Tile settings"
+          title="Settings"
+        >
+          ⚙
+        </button>
+      )}
+
       <div className="h-full overflow-auto">{children}</div>
     </div>
   );

@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { TileGrid } from './ui/TileGrid';
 import { Clock } from './ui/Clock';
 import { GoogleSignInGate } from './ui/GoogleSignInGate';
+import { NotificationPanel } from './ui/NotificationPanel';
 import { useAuthStore, signOut } from './lib/google/auth';
 import { useTileStore } from './lib/store/tile-store';
+import type { Page } from './lib/store/tile-store';
 
 type MenuItem = { label: string; emoji: string; shortcut: string; action: () => void };
 
@@ -17,10 +19,15 @@ export function App() {
   const renamePage = useTileStore((s) => s.renamePage);
   const setCurrentPage = useTileStore((s) => s.setCurrentPage);
   const toggleLock = useTileStore((s) => s.toggleLock);
+  const replaceDashboard = useTileStore((s) => s.replaceDashboard);
 
   const profile = useAuthStore((s) => s.profile);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
+  const importRef = useRef<HTMLInputElement>(null);
 
   const [renamingPageId, setRenamingPageId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
@@ -29,6 +36,7 @@ export function App() {
     { label: 'Bookmarks', emoji: '🔖', shortcut: 'B', action: () => addTile({ kind: 'bookmarks',  id: crypto.randomUUID(), title: 'Links', links: [] }) },
     { label: 'Launcher',  emoji: '🔗', shortcut: 'L', action: () => addTile({ kind: 'launcher',   id: crypto.randomUUID(), label: 'New Link', url: '' }) },
     { label: 'Notes',     emoji: '📝', shortcut: 'O', action: () => addTile({ kind: 'notes',      id: crypto.randomUUID(), title: 'Note', content: '' }) },
+    { label: 'Countdown', emoji: '⏳', shortcut: 'K', action: () => addTile({ kind: 'countdown',  id: crypto.randomUUID(), label: '', targetDate: '', emoji: '🎯' }) },
     { label: 'Calculator',emoji: '🔢', shortcut: 'C', action: () => addTile({ kind: 'calculator', id: crypto.randomUUID() }) },
     { label: 'Weather',   emoji: '🌤️', shortcut: 'W', action: () => addTile({ kind: 'weather',    id: crypto.randomUUID(), locationMode: 'geolocation' }) },
     { label: 'Calendar',  emoji: '📅', shortcut: 'G', action: () => addTile({ kind: 'gcal',        id: crypto.randomUUID() }) },
@@ -42,7 +50,7 @@ export function App() {
     function onKey(e: KeyboardEvent) {
       const tag = (e.target as HTMLElement).tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if (e.key === 'Escape') { setMenuOpen(false); return; }
+      if (e.key === 'Escape') { setMenuOpen(false); setMoreOpen(false); return; }
       if (!e.altKey) return;
       const item = menuItems.find((m) => m.shortcut.toLowerCase() === e.key.toLowerCase());
       if (item) { e.preventDefault(); item.action(); setMenuOpen(false); }
@@ -55,14 +63,43 @@ export function App() {
   useEffect(() => {
     function onOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setMoreOpen(false);
     }
-    if (menuOpen) document.addEventListener('mousedown', onOutside);
+    if (menuOpen || moreOpen) document.addEventListener('mousedown', onOutside);
     return () => document.removeEventListener('mousedown', onOutside);
-  }, [menuOpen]);
+  }, [menuOpen, moreOpen]);
 
   function commitRename(id: string) {
     renamePage(id, renameValue.trim() || 'Page');
     setRenamingPageId(null);
+  }
+
+  function handleExport() {
+    const data = { version: 5, pages, currentPageId };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'grandpa-dashboard.json'; a.click();
+    URL.revokeObjectURL(url);
+    setMoreOpen(false);
+  }
+
+  function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target?.result as string) as { version?: number; pages?: Page[]; currentPageId?: string };
+        if (!Array.isArray(data.pages) || !data.currentPageId) throw new Error('Invalid format');
+        replaceDashboard(data.pages, data.currentPageId);
+      } catch {
+        alert('Could not import — file format is invalid.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+    setMoreOpen(false);
   }
 
   return (
@@ -75,10 +112,8 @@ export function App() {
           {/* Top row */}
           <div className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4">
 
-            {/* Left — clock */}
             <Clock />
 
-            {/* Center — title */}
             <h1
               className="absolute left-1/2 -translate-x-1/2 text-xl sm:text-3xl text-white select-none whitespace-nowrap tracking-tight"
               style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 900 }}
@@ -86,8 +121,7 @@ export function App() {
               Grandpa Project
             </h1>
 
-            {/* Right — profile + add */}
-            <div className="flex items-center gap-2 sm:gap-3 ml-auto" ref={menuRef}>
+            <div className="flex items-center gap-2 sm:gap-3 ml-auto">
 
               {profile && (
                 <div className="flex items-center gap-2">
@@ -107,7 +141,18 @@ export function App() {
                 </div>
               )}
 
-              {/* Lock toggle */}
+              {profile && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
+
+              {/* Bell / notifications */}
+              <button
+                onClick={() => setNotifOpen((v) => !v)}
+                title="Notifications"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all"
+              >
+                🔔
+              </button>
+
+              {/* Lock */}
               <button
                 onClick={toggleLock}
                 title={locked ? 'Unlock dashboard' : 'Lock dashboard'}
@@ -120,10 +165,34 @@ export function App() {
                 {locked ? '🔒' : '🔓'}
               </button>
 
+              {/* More (export/import) */}
+              <div className="relative" ref={moreRef}>
+                <button
+                  onClick={() => setMoreOpen((v) => !v)}
+                  title="More options"
+                  className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all font-bold"
+                >
+                  ⋯
+                </button>
+                {moreOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl bg-[#0d0d14]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.8)] py-1.5 z-50">
+                    <button onClick={handleExport}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
+                      <span>⬇</span> Export dashboard
+                    </button>
+                    <button onClick={() => importRef.current?.click()}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
+                      <span>⬆</span> Import dashboard
+                    </button>
+                    <input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
+                  </div>
+                )}
+              </div>
+
               {profile && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
 
               {/* Add tile */}
-              <div className={`relative ${locked ? 'hidden' : ''}`}>
+              <div className={`relative ${locked ? 'hidden' : ''}`} ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
                   aria-expanded={menuOpen}
@@ -212,6 +281,9 @@ export function App() {
         <div className="p-2 sm:p-6">
           <TileGrid />
         </div>
+
+        {/* Notification panel */}
+        {notifOpen && <NotificationPanel onClose={() => setNotifOpen(false)} />}
       </div>
     </GoogleSignInGate>
   );

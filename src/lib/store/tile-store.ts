@@ -21,6 +21,7 @@ const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   rss:        { w: 4, h: 4 },
   gmail:      { w: 4, h: 5 },
   notes:      { w: 3, h: 4 },
+  countdown:  { w: 2, h: 2 },
 };
 
 function makePage(name: string): Page {
@@ -40,6 +41,7 @@ type TileStore = {
   removeTile: (id: string) => void;
   updateTile: (tile: Tile) => void;
   updateLayouts: (layouts: Layouts) => void;
+  replaceDashboard: (pages: Page[], currentPageId: string) => void;
 };
 
 const initialPage = makePage('Home');
@@ -138,6 +140,8 @@ export const useTileStore = create<TileStore>()(
           newPages[idx] = { ...newPages[idx], layouts };
           return { pages: newPages };
         }),
+
+      replaceDashboard: (pages, currentPageId) => set({ pages, currentPageId }),
     }),
     {
       name: 'dashboard-tiles',
