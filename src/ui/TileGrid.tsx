@@ -36,7 +36,7 @@ export function TileGrid() {
   const prevCount = useRef(tiles.length);
   useEffect(() => {
     if (tiles.length > prevCount.current) {
-      setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 50);
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
     }
     prevCount.current = tiles.length;
   }, [tiles.length]);

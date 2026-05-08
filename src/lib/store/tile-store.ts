@@ -81,14 +81,15 @@ export const useTileStore = create<TileStore>()(
           if (idx === -1) return state;
           const page = state.pages[idx];
           const lgLayout = page.layouts.lg ?? [];
-          const maxY = lgLayout.reduce((m, l) => Math.max(m, l.y + l.h), 0);
           const size = DEFAULT_SIZES[tile.kind];
+          // Shift every existing tile down to make room at the top
+          const shifted = lgLayout.map((l) => ({ ...l, y: l.y + size.h }));
           const newPage: Page = {
             ...page,
             tiles: [...page.tiles, tile],
             layouts: {
               ...page.layouts,
-              lg: [...lgLayout, { i: tile.id, x: 0, y: maxY, w: size.w, h: size.h }],
+              lg: [...shifted, { i: tile.id, x: 0, y: 0, w: size.w, h: size.h }],
             },
           };
           const newPages = [...state.pages];
