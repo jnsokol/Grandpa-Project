@@ -25,6 +25,7 @@ const ResizeHandle = (
 export function TileGrid() {
   const pages = useTileStore((s) => s.pages);
   const currentPageId = useTileStore((s) => s.currentPageId);
+  const locked = useTileStore((s) => s.locked);
   const removeTile = useTileStore((s) => s.removeTile);
   const updateLayouts = useTileStore((s) => s.updateLayouts);
 
@@ -112,6 +113,8 @@ export function TileGrid() {
         cols={COLS}
         rowHeight={90}
         draggableHandle=".drag-handle"
+        isDraggable={!locked}
+        isResizable={!locked}
         onLayoutChange={handleLayoutChange}
         onDragStart={handleDragStart}
         onDrag={handleDrag}
@@ -123,7 +126,7 @@ export function TileGrid() {
       >
         {tiles.map((tile) => (
           <div key={tile.id} className="relative rounded-2xl overflow-hidden">
-            <TileShell>
+            <TileShell locked={locked}>
               {renderTile(tile)}
             </TileShell>
           </div>
@@ -131,7 +134,7 @@ export function TileGrid() {
       </ResponsiveGridLayout>
 
       {/* Drag-to-remove trash zone */}
-      {dragging && (
+      {dragging && !locked && (
         <div
           ref={trashRef}
           className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-8 py-4 rounded-2xl border-2 transition-all duration-150 pointer-events-none select-none ${

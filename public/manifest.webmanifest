@@ -1,11 +1,11 @@
 {
-  "name": "Personal Dashboard",
-  "short_name": "Dashboard",
-  "description": "Personal and family tile dashboard with weather, Google Calendar, Tasks, Drive, and news.",
+  "name": "Grandpa Project",
+  "short_name": "Grandpa",
+  "description": "Personal family dashboard — Calendar, Gmail, Tasks, Drive, Weather and more.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#e2e8f0",
-  "theme_color": "#f8fafc",
+  "background_color": "#080810",
+  "theme_color": "#080810",
   "icons": [
     {
       "src": "/icon.svg",

@@ -30,10 +30,12 @@ function makePage(name: string): Page {
 type TileStore = {
   pages: Page[];
   currentPageId: string;
+  locked: boolean;
   addPage: () => void;
   removePage: (id: string) => void;
   renamePage: (id: string, name: string) => void;
   setCurrentPage: (id: string) => void;
+  toggleLock: () => void;
   addTile: (tile: Tile) => void;
   removeTile: (id: string) => void;
   updateTile: (tile: Tile) => void;
@@ -47,6 +49,9 @@ export const useTileStore = create<TileStore>()(
     (set) => ({
       pages: [initialPage],
       currentPageId: initialPage.id,
+      locked: false,
+
+      toggleLock: () => set((state) => ({ locked: !state.locked })),
 
       addPage: () =>
         set((state) => {

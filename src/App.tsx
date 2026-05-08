@@ -11,10 +11,12 @@ export function App() {
   const addTile = useTileStore((s) => s.addTile);
   const pages = useTileStore((s) => s.pages);
   const currentPageId = useTileStore((s) => s.currentPageId);
+  const locked = useTileStore((s) => s.locked);
   const addPage = useTileStore((s) => s.addPage);
   const removePage = useTileStore((s) => s.removePage);
   const renamePage = useTileStore((s) => s.renamePage);
   const setCurrentPage = useTileStore((s) => s.setCurrentPage);
+  const toggleLock = useTileStore((s) => s.toggleLock);
 
   const profile = useAuthStore((s) => s.profile);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -105,10 +107,23 @@ export function App() {
                 </div>
               )}
 
+              {/* Lock toggle */}
+              <button
+                onClick={toggleLock}
+                title={locked ? 'Unlock dashboard' : 'Lock dashboard'}
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm transition-all ${
+                  locked
+                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30'
+                    : 'bg-white/[0.06] text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.10] border border-white/[0.08]'
+                }`}
+              >
+                {locked ? '🔒' : '🔓'}
+              </button>
+
               {profile && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
 
               {/* Add tile */}
-              <div className="relative">
+              <div className={`relative ${locked ? 'hidden' : ''}`}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
                   aria-expanded={menuOpen}
@@ -181,13 +196,15 @@ export function App() {
                 )}
               </div>
             ))}
-            <button
-              onClick={addPage}
-              className="px-2 py-1 rounded-lg text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.06] text-xs transition-all shrink-0"
-              title="Add new page"
-            >
-              +
-            </button>
+            {!locked && (
+              <button
+                onClick={addPage}
+                className="px-2 py-1 rounded-lg text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.06] text-xs transition-all shrink-0"
+                title="Add new page"
+              >
+                +
+              </button>
+            )}
           </div>
         </header>
 
