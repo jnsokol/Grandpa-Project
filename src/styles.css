@@ -4,11 +4,6 @@
   box-sizing: border-box;
 }
 
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body {
   margin: 0;
   min-width: 320px;
@@ -22,41 +17,23 @@ select {
   font: inherit;
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.10);
-  border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.18);
-}
-
-/* ── Hide the default react-resizable arrow ── */
+/* Hide the default react-resizable arrow — we use our own custom handle */
 .react-resizable-handle::after {
   display: none !important;
 }
 
-/* ── Drag placeholder ── */
+/* Drag placeholder — neutral grey, no blue */
 .react-grid-layout .react-grid-placeholder {
-  background: rgba(99,102,241,0.15) !important;
-  border: 1px solid rgba(99,102,241,0.25) !important;
-  opacity: 1 !important;
+  background: #71717a !important;
+  opacity: 0.15 !important;
   border-radius: 1rem !important;
-  backdrop-filter: blur(4px);
 }
 
-/* ── Tile entrance animation ── */
+/* Tile entrance animation */
 @keyframes tile-enter {
   from {
     opacity: 0;
-    transform: scale(0.97) translateY(8px);
+    transform: scale(0.96) translateY(6px);
   }
   to {
     opacity: 1;
@@ -65,24 +42,24 @@ select {
 }
 
 .tile-enter {
-  animation: tile-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: tile-enter 0.22s ease-out both;
 }
 
-/* ── Page / panel fade-in ── */
+/* Page / panel fade-in */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-in 0.18s ease-out both;
 }
 
-/* ── Page switch ── */
+/* Page switch: grid fades when page changes */
 @keyframes page-switch {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -91,6 +68,5 @@ select {
 }
 
 .page-switch {
-  animation: page-switch 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: page-switch 0.2s ease-out both;
 }
-

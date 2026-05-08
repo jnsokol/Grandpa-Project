@@ -8,18 +8,12 @@ export type Preset = {
 };
 
 export const PRESETS: Preset[] = [
-  { id: 'indigo',   label: 'Indigo',   bg: '#06060f',
-    gradient: 'radial-gradient(ellipse 80% 50% at 20% -10%, rgba(99,102,241,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 110%, rgba(139,92,246,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 60% 60%, rgba(6,182,212,0.05) 0%, transparent 60%)' },
-  { id: 'midnight', label: 'Midnight', bg: '#02020f',
-    gradient: 'radial-gradient(ellipse 70% 50% at 10% -5%, rgba(59,130,246,0.20) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 90% 100%, rgba(99,102,241,0.10) 0%, transparent 60%)' },
-  { id: 'forest',   label: 'Forest',   bg: '#020f06',
-    gradient: 'radial-gradient(ellipse 70% 50% at 30% -10%, rgba(34,197,94,0.15) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 110%, rgba(16,185,129,0.10) 0%, transparent 60%)' },
-  { id: 'rose',     label: 'Rose',     bg: '#0f0205',
-    gradient: 'radial-gradient(ellipse 70% 50% at 20% -10%, rgba(244,63,94,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 85% 110%, rgba(217,70,239,0.10) 0%, transparent 60%)' },
-  { id: 'black',    label: 'Black',    bg: '#000000',
-    gradient: 'radial-gradient(ellipse 60% 40% at 50% -5%, rgba(255,255,255,0.03) 0%, transparent 60%)' },
-  { id: 'ocean',    label: 'Ocean',    bg: '#010c14',
-    gradient: 'radial-gradient(ellipse 70% 50% at 20% -10%, rgba(6,182,212,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 110%, rgba(99,102,241,0.10) 0%, transparent 60%)' },
+  { id: 'indigo',   label: 'Indigo',   bg: '#080810', gradient: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.10) 0%, transparent 60%)' },
+  { id: 'midnight', label: 'Midnight', bg: '#02020f', gradient: 'radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.13) 0%, transparent 60%)' },
+  { id: 'forest',   label: 'Forest',   bg: '#020f06', gradient: 'radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.10) 0%, transparent 60%)' },
+  { id: 'rose',     label: 'Rose',     bg: '#0f0205', gradient: 'radial-gradient(ellipse at 50% 0%, rgba(244,63,94,0.10) 0%, transparent 60%)' },
+  { id: 'black',    label: 'Black',    bg: '#000000', gradient: 'none' },
+  { id: 'ocean',    label: 'Ocean',    bg: '#010c14', gradient: 'radial-gradient(ellipse at 50% 0%, rgba(6,182,212,0.11) 0%, transparent 60%)' },
 ];
 
 export function getPreset(id: string): Preset {

@@ -139,190 +139,193 @@ export function App() {
     setMoreOpen(false);
   }
 
+  // Suppress unused setBg warning — it's used by BackgroundPicker through the store
   void setBg;
-
-  const sideBtn = (active: boolean) =>
-    `w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
-      active
-        ? 'bg-zinc-800 text-white'
-        : 'text-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
-    }`;
 
   return (
     <GoogleSignInGate>
-      <div className="flex h-screen overflow-hidden">
+      <div className="min-h-screen transition-colors duration-500" style={bgStyle(bg)}>
 
-        {/* ════ SIDEBAR ════ */}
-        <aside className="w-56 shrink-0 flex flex-col bg-[#0c0c0c] border-r border-white/[0.05] h-screen sticky top-0 z-30">
+        {/* ── Header ── */}
+        <header className="sticky top-0 z-20 bg-[#0d0d14]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.04),0_4px_32px_rgba(0,0,0,0.5)]">
 
-          {/* Logo */}
-          <div className="px-5 pt-6 pb-5">
-            <h1 className="text-white text-base font-bold tracking-tight select-none"
-              style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Grandpa Project
-            </h1>
-            <p className="text-zinc-700 text-[10px] tracking-widest uppercase mt-0.5 select-none">Dashboard</p>
-          </div>
+          {/* Top row */}
+          <div className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4">
 
-          {/* Clock */}
-          <div className="px-5 pb-4">
             <Clock />
+
+            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+              <h1
+                className="text-xl sm:text-3xl text-white select-none whitespace-nowrap tracking-tight leading-tight"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 900 }}
+              >
+                Grandpa Project
+              </h1>
+              <p className="text-zinc-600 text-[10px] font-light tracking-widest uppercase select-none whitespace-nowrap">
+                Everything you need
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-2.5 ml-auto">
+
+              {profile && (
+                <div className="flex items-center gap-2">
+                  {profile.picture ? (
+                    <img src={profile.picture} alt={profile.name} title={profile.name}
+                      referrerPolicy="no-referrer"
+                      className="w-8 h-8 rounded-full ring-2 ring-zinc-700 hover:ring-zinc-500 transition-all" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-white text-sm font-bold ring-2 ring-zinc-600">
+                      {profile.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <button onClick={signOut}
+                    className="hidden sm:block px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.10] border border-white/[0.08] text-zinc-400 hover:text-white text-xs font-medium transition-all">
+                    Sign out
+                  </button>
+                </div>
+              )}
+
+              {profile && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
+
+              {/* Search */}
+              <button onClick={() => setSearchOpen(true)} title="Search tiles (⌘K)"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all">
+                🔍
+              </button>
+
+              {/* Quick note */}
+              <button onClick={() => setNoteOpen((v) => !v)} title="Quick note"
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                  noteOpen ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border-white/[0.08]'
+                }`}>
+                ✏️
+              </button>
+
+              {/* Notifications */}
+              <button onClick={() => setNotifOpen((v) => !v)} title="Notifications"
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                  notifOpen ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' : 'bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border-white/[0.08]'
+                }`}>
+                🔔
+              </button>
+
+              {/* Background */}
+              <button onClick={() => setBgOpen((v) => !v)} title="Background"
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                  bgOpen ? 'bg-white/[0.15] text-white border-white/[0.20]' : 'bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border-white/[0.08]'
+                }`}>
+                🎨
+              </button>
+
+              {/* Lock */}
+              <button onClick={toggleLock} title={locked ? 'Unlock dashboard' : 'Lock dashboard'}
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm transition-all ${
+                  locked ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30' : 'bg-white/[0.06] text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.10] border border-white/[0.08]'
+                }`}>
+                {locked ? '🔒' : '🔓'}
+              </button>
+
+              {/* More (export/import) */}
+              <div className="relative" ref={moreRef}>
+                <button onClick={() => setMoreOpen((v) => !v)} title="More options"
+                  className="w-8 h-8 rounded-xl flex items-center justify-center text-sm bg-white/[0.06] hover:bg-white/[0.10] text-zinc-400 hover:text-white border border-white/[0.08] transition-all font-bold">
+                  ⋯
+                </button>
+                {moreOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl bg-[#0d0d14]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.8)] py-1.5 z-50">
+                    <button onClick={handleExport}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
+                      <span>⬇</span> Export dashboard
+                    </button>
+                    <button onClick={() => importRef.current?.click()}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
+                      <span>⬆</span> Import dashboard
+                    </button>
+                    <input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
+                  </div>
+                )}
+              </div>
+
+              {!locked && <div className="hidden sm:block w-px h-5 bg-white/[0.08]" />}
+
+              {/* Add tile */}
+              <div className={`relative ${locked ? 'hidden' : ''}`} ref={menuRef}>
+                <button
+                  onClick={() => setMenuOpen((v) => !v)}
+                  aria-expanded={menuOpen}
+                  aria-haspopup="menu"
+                  aria-label="Add tile"
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                    menuOpen
+                      ? 'bg-indigo-500/90 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]'
+                      : 'bg-indigo-600/80 hover:bg-indigo-500/90 text-white border border-indigo-400/20 hover:border-indigo-400/40 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]'
+                  }`}
+                >
+                  <span className={`text-base leading-none transition-transform duration-200 ${menuOpen ? 'rotate-45' : ''}`}>+</span>
+                  <span className="hidden sm:inline">Add tile</span>
+                </button>
+
+                {menuOpen && (
+                  <div role="menu"
+                    className="absolute right-0 top-full mt-2 w-52 sm:w-56 rounded-2xl bg-[#0d0d14]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.8)] py-1.5 z-50 overflow-hidden animate-fade-in">
+                    {menuItems.map((item) => (
+                      <button key={item.label} role="menuitem"
+                        onClick={() => { item.action(); setMenuOpen(false); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
+                        <span className="text-base w-5 text-center shrink-0">{item.emoji}</span>
+                        <span className="flex-1 font-medium text-left">{item.label}</span>
+                        <kbd className="hidden sm:block text-[10px] text-zinc-600 font-mono bg-white/[0.05] border border-white/[0.08] rounded px-1.5 py-0.5">⌥{item.shortcut}</kbd>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="mx-4 h-px bg-white/[0.05]" />
-
-          {/* Pages */}
-          <div className="px-3 pt-4 pb-2">
-            <p className="px-3 mb-2 text-[10px] font-semibold text-zinc-600 uppercase tracking-widest">Pages</p>
-            <div className="space-y-0.5">
-              {pages.map((page) => (
-                <div key={page.id} className="relative group/tab">
-                  {renamingPageId === page.id ? (
-                    <input
-                      autoFocus
-                      value={renameValue}
-                      onChange={(e) => setRenameValue(e.target.value)}
-                      onBlur={() => commitRename(page.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') commitRename(page.id);
-                        if (e.key === 'Escape') setRenamingPageId(null);
-                      }}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-800 text-white text-sm outline-none border border-zinc-600"
-                    />
-                  ) : (
-                    <button
-                      onClick={() => setCurrentPage(page.id)}
-                      onDoubleClick={() => { setRenamingPageId(page.id); setRenameValue(page.name); }}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 text-left ${
-                        currentPageId === page.id
-                          ? 'bg-zinc-800 text-white'
-                          : 'text-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
-                      }`}
-                    >
-                      <span className="truncate">{page.name}</span>
-                      {pages.length > 1 && (
-                        <span
-                          onClick={(e) => { e.stopPropagation(); removePage(page.id); }}
-                          className="text-zinc-700 hover:text-zinc-300 text-xs opacity-0 group-hover/tab:opacity-100 transition-all ml-1 cursor-pointer leading-none"
-                        >×</span>
-                      )}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
+          {/* Page tabs row */}
+          <div className="flex items-center gap-1 px-4 sm:px-6 pb-2 overflow-x-auto scrollbar-hide">
+            {pages.map((page) => (
+              <div key={page.id} className="relative group flex items-center shrink-0">
+                {renamingPageId === page.id ? (
+                  <input autoFocus value={renameValue}
+                    onChange={(e) => setRenameValue(e.target.value)}
+                    onBlur={() => commitRename(page.id)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') commitRename(page.id); if (e.key === 'Escape') setRenamingPageId(null); }}
+                    className="px-2 py-1 rounded-lg bg-white/[0.10] text-white text-xs font-medium outline-none border border-white/[0.20] w-24" />
+                ) : (
+                  <button
+                    onClick={() => setCurrentPage(page.id)}
+                    onDoubleClick={() => { setRenamingPageId(page.id); setRenameValue(page.name); }}
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${pages.length > 1 ? 'pr-6' : ''} ${
+                      currentPageId === page.id ? 'bg-white/[0.12] text-white' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.06]'
+                    }`}
+                  >
+                    {page.name}
+                  </button>
+                )}
+                {pages.length > 1 && renamingPageId !== page.id && (
+                  <button onClick={() => removePage(page.id)}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-all leading-none">
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
             {!locked && (
-              <button
-                onClick={addPage}
-                className="w-full flex items-center gap-2 px-3 py-2 mt-1 rounded-lg text-sm text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900 transition-all"
-              >
-                <span className="text-base leading-none">+</span> Add page
+              <button onClick={addPage}
+                className="px-2 py-1 rounded-lg text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.06] text-xs transition-all shrink-0" title="Add new page">
+                +
               </button>
             )}
           </div>
+        </header>
 
-          <div className="mx-4 h-px bg-white/[0.05] mt-2" />
-
-          {/* Add tile */}
-          {!locked && (
-            <div className="px-3 pt-3 relative" ref={menuRef}>
-              <button
-                onClick={() => setMenuOpen((v) => !v)}
-                aria-expanded={menuOpen}
-                aria-haspopup="menu"
-                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-zinc-200 transition-all"
-              >
-                <span className={`text-base leading-none transition-transform duration-200 ${menuOpen ? 'rotate-45' : ''}`}>+</span>
-                Add widget
-              </button>
-
-              {menuOpen && (
-                <div role="menu"
-                  className="absolute left-3 right-3 top-full mt-1 rounded-xl bg-[#111] border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.9)] py-1 z-50 overflow-hidden animate-fade-in">
-                  {menuItems.map((item) => (
-                    <button key={item.label} role="menuitem"
-                      onClick={() => { item.action(); setMenuOpen(false); }}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
-                      <span className="text-sm w-4 text-center shrink-0">{item.emoji}</span>
-                      <span className="flex-1 font-medium text-left">{item.label}</span>
-                      <kbd className="text-[10px] text-zinc-700 font-mono">⌥{item.shortcut}</kbd>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Spacer */}
-          <div className="flex-1" />
-
-          <div className="mx-4 h-px bg-white/[0.05]" />
-
-          {/* Tools */}
-          <div className="px-3 py-3 space-y-0.5">
-            <button onClick={() => setSearchOpen(true)} className={sideBtn(false)}>
-              <span className="text-base">🔍</span> Search
-              <kbd className="ml-auto text-[10px] text-zinc-700 font-mono">⌘K</kbd>
-            </button>
-            <button onClick={() => setNoteOpen((v) => !v)} className={sideBtn(noteOpen)}>
-              <span className="text-base">✏️</span> Quick note
-            </button>
-            <button onClick={() => setNotifOpen((v) => !v)} className={sideBtn(notifOpen)}>
-              <span className="text-base">🔔</span> Notifications
-            </button>
-            <button onClick={() => setBgOpen((v) => !v)} className={sideBtn(bgOpen)}>
-              <span className="text-base">🎨</span> Background
-            </button>
-            <button onClick={toggleLock} className={sideBtn(locked)}>
-              <span className="text-base">{locked ? '🔒' : '🔓'}</span>
-              {locked ? 'Locked' : 'Lock layout'}
-            </button>
-
-            <div className="relative" ref={moreRef}>
-              <button onClick={() => setMoreOpen((v) => !v)} className={sideBtn(moreOpen)}>
-                <span className="text-base">⋯</span> More
-              </button>
-              {moreOpen && (
-                <div className="absolute left-0 right-0 bottom-full mb-1 rounded-xl bg-[#111] border border-white/[0.08] shadow-[0_-12px_40px_rgba(0,0,0,0.9)] py-1 z-50 animate-fade-in">
-                  <button onClick={handleExport} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
-                    ⬇ Export dashboard
-                  </button>
-                  <button onClick={() => importRef.current?.click()} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
-                    ⬆ Import dashboard
-                  </button>
-                  <input ref={importRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="mx-4 h-px bg-white/[0.05]" />
-
-          {/* Profile */}
-          {profile && (
-            <div className="px-4 py-4 flex items-center gap-3">
-              {profile.picture ? (
-                <img src={profile.picture} alt={profile.name} referrerPolicy="no-referrer"
-                  className="w-7 h-7 rounded-full shrink-0" />
-              ) : (
-                <div className="w-7 h-7 rounded-full bg-zinc-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                  {profile.name.charAt(0).toUpperCase()}
-                </div>
-              )}
-              <div className="flex-1 min-w-0">
-                <p className="text-zinc-300 text-xs font-medium truncate">{profile.name}</p>
-                <button onClick={signOut} className="text-zinc-600 hover:text-zinc-400 text-[10px] transition-colors">Sign out</button>
-              </div>
-            </div>
-          )}
-        </aside>
-
-        {/* ════ MAIN CONTENT ════ */}
-        <main className="flex-1 overflow-y-auto transition-colors duration-700" style={bgStyle(bg)}>
-          <div className="p-4 sm:p-6">
-            {showOnboarding ? <OnboardingFlow /> : <TileGrid />}
-          </div>
-        </main>
+        {/* ── Main content ── */}
+        <div className="p-2 sm:p-6">
+          {showOnboarding ? <OnboardingFlow /> : <TileGrid />}
+        </div>
 
         {/* ── Overlays ── */}
         {notifOpen  && <NotificationPanel  onClose={() => setNotifOpen(false)} />}
