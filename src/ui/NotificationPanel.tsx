@@ -37,7 +37,6 @@ export function NotificationPanel({ onClose }: { onClose: () => void }) {
     }
     const at = token.access_token;
     const headers = { Authorization: `Bearer ${at}` };
-
     const now = new Date();
     const in48h = new Date(now.getTime() + 48 * 60 * 60 * 1000);
 
@@ -90,30 +89,38 @@ export function NotificationPanel({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div
-        className="absolute top-[60px] right-4 sm:right-8 w-80 max-w-[92vw] bg-[#0d0d14]/98 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.8)] overflow-hidden"
+        className="absolute top-[72px] right-4 w-84 max-w-[calc(100vw-2rem)] bg-[#111116] border border-white/[0.08] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.04)] overflow-hidden"
+        style={{ width: '340px' }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+          <p className="text-white text-sm font-semibold">Notifications</p>
+          <button onClick={onClose} className="text-zinc-600 hover:text-zinc-300 text-lg leading-none transition-colors">×</button>
+        </div>
+
         {state.loading ? (
-          <div className="p-6 text-center text-zinc-500 text-sm">Loading…</div>
+          <div className="p-6 text-center text-zinc-600 text-sm">Loading…</div>
         ) : state.error ? (
-          <div className="p-6 text-center text-zinc-500 text-sm">{state.error}</div>
+          <div className="p-6 text-center text-zinc-600 text-sm">{state.error}</div>
         ) : (
           <>
-            {/* Gmail section */}
-            <div className="px-4 pt-4 pb-2">
-              <p className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wide mb-2">
-                ✉️ Gmail · {state.unreadCount} unread
-              </p>
+            {/* Gmail */}
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between mb-2.5">
+                <p className="text-zinc-500 text-xs font-semibold uppercase tracking-widest">Gmail</p>
+                {state.unreadCount > 0 && (
+                  <span className="text-xs text-zinc-500 bg-white/[0.07] px-2 py-0.5 rounded-full">{state.unreadCount} unread</span>
+                )}
+              </div>
               {state.emails.length === 0 ? (
-                <p className="text-zinc-600 text-xs py-1">No unread emails</p>
+                <p className="text-zinc-700 text-sm py-1">No unread emails</p>
               ) : (
-                <div className="flex flex-col gap-1">
+                <div className="space-y-1">
                   {state.emails.map((e) => (
-                    <div key={e.id} className="bg-white/[0.05] rounded-xl px-3 py-2">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-white text-xs font-semibold truncate">{e.from}</p>
-                      </div>
-                      <p className="text-zinc-400 text-xs truncate">{e.subject}</p>
+                    <div key={e.id} className="bg-white/[0.04] rounded-xl px-3 py-2.5">
+                      <p className="text-white text-sm font-medium truncate">{e.from}</p>
+                      <p className="text-zinc-500 text-xs truncate mt-0.5">{e.subject}</p>
                     </div>
                   ))}
                 </div>
@@ -122,20 +129,18 @@ export function NotificationPanel({ onClose }: { onClose: () => void }) {
 
             <div className="h-px bg-white/[0.06] mx-4" />
 
-            {/* Calendar section */}
+            {/* Calendar */}
             <div className="px-4 pt-3 pb-4">
-              <p className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wide mb-2">
-                📅 Next 48 hours
-              </p>
+              <p className="text-zinc-500 text-xs font-semibold uppercase tracking-widest mb-2.5">Next 48 hours</p>
               {state.events.length === 0 ? (
-                <p className="text-zinc-600 text-xs py-1">No upcoming events</p>
+                <p className="text-zinc-700 text-sm py-1">No upcoming events</p>
               ) : (
-                <div className="flex flex-col gap-1.5">
+                <div className="space-y-2">
                   {state.events.map((ev) => (
-                    <div key={ev.id} className="flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-indigo-400/70 shrink-0" />
-                      <p className="text-white/80 text-xs truncate flex-1">{ev.summary}</p>
-                      <p className="text-zinc-500 text-[10px] shrink-0">{fmtEventTime(ev.start, ev.allDay)}</p>
+                    <div key={ev.id} className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-zinc-500 shrink-0" />
+                      <p className="text-zinc-300 text-sm truncate flex-1">{ev.summary}</p>
+                      <p className="text-zinc-600 text-xs shrink-0">{fmtEventTime(ev.start, ev.allDay)}</p>
                     </div>
                   ))}
                 </div>

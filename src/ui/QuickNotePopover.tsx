@@ -31,27 +31,42 @@ export function QuickNotePopover({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div
-        className="absolute top-[96px] right-4 sm:right-28 w-72 bg-[#0d0d14]/98 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.8)] p-4"
+        className="absolute top-[72px] right-4 w-80 max-w-[calc(100vw-2rem)] bg-[#111116] border border-white/[0.08] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.04)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-zinc-500 text-[10px] font-semibold uppercase tracking-wide mb-2">Quick note</p>
-        <textarea
-          ref={ref}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) save(); }}
-          placeholder="Write something…"
-          rows={4}
-          className="w-full bg-white/[0.07] border border-white/[0.12] rounded-xl px-3 py-2 text-sm text-white placeholder-white/25 outline-none focus:border-amber-400/40 resize-none"
-        />
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-zinc-700 text-[10px]">⌘↵ to save</p>
-          <div className="flex gap-2">
-            <button onClick={onClose} className="px-3 py-1.5 text-zinc-500 hover:text-white text-xs transition-colors">Cancel</button>
-            <button onClick={save} disabled={!text.trim()}
-              className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold disabled:opacity-40 transition-colors">
-              Save
-            </button>
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+          <p className="text-white text-sm font-semibold">Quick note</p>
+          <button onClick={onClose} className="text-zinc-600 hover:text-zinc-300 text-lg leading-none transition-colors">×</button>
+        </div>
+
+        <div className="p-4">
+          <textarea
+            ref={ref}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) save(); }}
+            placeholder="Write something…"
+            rows={4}
+            className="w-full bg-white/[0.06] border border-white/[0.09] rounded-xl px-3 py-2.5 text-sm text-white placeholder-zinc-700 outline-none focus:border-white/25 resize-none transition-colors"
+          />
+          <div className="flex items-center justify-between mt-3">
+            <p className="text-zinc-700 text-xs">⌘↵ to save</p>
+            <div className="flex gap-2">
+              <button
+                onClick={onClose}
+                className="px-3 py-1.5 text-zinc-500 hover:text-zinc-200 text-sm rounded-lg hover:bg-white/[0.06] transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={save}
+                disabled={!text.trim()}
+                className="px-4 py-1.5 bg-white text-black rounded-lg text-sm font-semibold disabled:opacity-30 hover:bg-zinc-200 transition-all"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>
