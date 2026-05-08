@@ -24,6 +24,7 @@ export const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   notes:      { w: 3, h: 4 },
   countdown:  { w: 2, h: 2 },
   spotify:    { w: 3, h: 3 },
+  youtube:    { w: 4, h: 5 },
 };
 
 function makePage(name: string): Page {

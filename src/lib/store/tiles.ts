@@ -92,9 +92,15 @@ export type Tile =
   | GmailTile
   | NotesTile
   | CountdownTile
-  | SpotifyTile;
+  | SpotifyTile
+  | YoutubeTile;
 
 export type SpotifyTile = {
   kind: 'spotify';
+  id: string;
+};
+
+export type YoutubeTile = {
+  kind: 'youtube';
   id: string;
 };

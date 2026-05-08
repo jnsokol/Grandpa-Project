@@ -12,6 +12,7 @@ import { GmailTile } from '../tiles/gmail/GmailTile';
 import { NotesTile } from '../tiles/notes/NotesTile';
 import { CountdownTile } from '../tiles/countdown/CountdownTile';
 import { SpotifyTile } from '../tiles/spotify/SpotifyTile';
+import { YouTubeTile } from '../tiles/youtube/YouTubeTile';
 
 export const TILE_LABELS: Record<Tile['kind'], string> = {
   launcher: 'Launcher',
@@ -26,6 +27,7 @@ export const TILE_LABELS: Record<Tile['kind'], string> = {
   notes: 'Sticky Notes',
   countdown: 'Countdown',
   spotify: 'Spotify',
+  youtube: 'YouTube',
 };
 
 export function renderTile(tile: Tile): ReactNode {
@@ -54,6 +56,8 @@ export function renderTile(tile: Tile): ReactNode {
       return <CountdownTile tile={tile} />;
     case 'spotify':
       return <SpotifyTile />;
+    case 'youtube':
+      return <YouTubeTile />;
     default:
       return (
         <div className="flex items-center justify-center h-full text-sm text-slate-400">

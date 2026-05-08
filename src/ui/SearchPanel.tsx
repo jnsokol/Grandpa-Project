@@ -6,7 +6,7 @@ import type { Tile } from '../lib/store/tiles';
 const EMOJI: Record<Tile['kind'], string> = {
   launcher: '🔗', bookmarks: '🔖', calculator: '🔢', weather: '🌤️',
   gcal: '📅', todo: '✅', gdrive: '📁', rss: '📰', gmail: '✉️',
-  notes: '📝', countdown: '⏳', spotify: '🎵',
+  notes: '📝', countdown: '⏳', spotify: '🎵', youtube: '▶️',
 };
 
 function tileDisplayName(tile: Tile): string {
