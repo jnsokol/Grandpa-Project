@@ -126,6 +126,7 @@ export function TileGrid() {
         resizeHandle={ResizeHandle}
         compactType={null}
         preventCollision
+        measureBeforeMount
       >
         {tiles.map((tile, i) => (
           <div key={tile.id} className="relative rounded-2xl overflow-hidden tile-enter" style={{ animationDelay: `${i * 25}ms` }}>

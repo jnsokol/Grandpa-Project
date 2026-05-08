@@ -155,8 +155,24 @@ export const useTileStore = create<TileStore>()(
     }),
     {
       name: 'dashboard-tiles',
-      version: 5,
-      migrate: () => {
+      version: 6,
+      migrate: (persistedState) => {
+        const s = persistedState as { pages?: Page[]; currentPageId?: string; locked?: boolean; bg?: BgConfig; onboardingDone?: boolean };
+        if (s?.pages?.length) {
+          // Rebuild lg layouts from tile list to fix overlapping caused by WidthProvider 0-width render
+          s.pages = s.pages.map((page) => {
+            const tiles = page.tiles ?? [];
+            let y = 0;
+            const lgLayout = tiles.map((tile) => {
+              const size = DEFAULT_SIZES[tile.kind] ?? { w: 3, h: 3 };
+              const item = { i: tile.id, x: 0, y, w: size.w, h: size.h };
+              y += size.h;
+              return item;
+            });
+            return { ...page, layouts: { lg: lgLayout } };
+          });
+          return s;
+        }
         const page = makePage('Home');
         return { pages: [page], currentPageId: page.id };
       },
