@@ -50,23 +50,47 @@ export function SpotifyTile() {
     const t = await getToken();
     if (!t) { setDebug('no token'); return; }
     try {
-      let res = await fetch('https://api.spotify.com/v1/me/player?additional_types=track,episode', {
-        headers: { Authorization: `Bearer ${t.access_token}` },
-      });
-      const s1 = res.status;
-      if (res.status === 204) {
-        res = await fetch('https://api.spotify.com/v1/me/player/currently-playing?additional_types=track,episode', {
-          headers: { Authorization: `Bearer ${t.access_token}` },
+      const headers = { Authorization: `Bearer ${t.access_token}` };
+      const [playerRes, devicesRes] = await Promise.all([
+        fetch('https://api.spotify.com/v1/me/player', { headers }),
+        fetch('https://api.spotify.com/v1/me/player/devices', { headers }),
+      ]);
+      const s1 = playerRes.status;
+      let deviceInfo = '';
+      if (devicesRes.ok) {
+        const devData = await devicesRes.json() as { devices: { name: string; is_active: boolean; type: string }[] };
+        const active = devData.devices.find((d) => d.is_active);
+        deviceInfo = devData.devices.length === 0
+          ? ' devs:none'
+          : ` devs:${devData.devices.length}${active ? `(${active.name.slice(0, 10)})` : '(none active)'}`;
+      }
+      if (playerRes.status === 204) {
+        const currRes = await fetch('https://api.spotify.com/v1/me/player/currently-playing', { headers });
+        setDebug(`player:${s1} curr:${currRes.status}${deviceInfo}`);
+        if (currRes.status === 204) { setTrack(null); setError(''); return; }
+        if (!currRes.ok) {
+          const body = await currRes.text();
+          throw new Error(`${currRes.status}: ${body.slice(0, 80)}`);
+        }
+        const data = await currRes.json() as PlaybackState;
+        if (!data.item) { setTrack(null); setError(''); return; }
+        setTrack({
+          name: data.item.name,
+          artist: data.item.artists.map((a) => a.name).join(', '),
+          albumArt: data.item.album.images[0]?.url ?? '',
+          durationMs: data.item.duration_ms,
+          progressMs: data.progress_ms,
+          isPlaying: data.is_playing,
         });
+        setError('');
+        return;
       }
-      const s2 = res.status;
-      setDebug(`player:${s1} curr:${s2}`);
-      if (res.status === 204) { setTrack(null); setError(''); return; }
-      if (!res.ok) {
-        const body = await res.text();
-        throw new Error(`${res.status}: ${body.slice(0, 80)}`);
+      setDebug(`player:${s1}${deviceInfo}`);
+      if (!playerRes.ok) {
+        const body = await playerRes.text();
+        throw new Error(`${playerRes.status}: ${body.slice(0, 80)}`);
       }
-      const data = await res.json() as PlaybackState;
+      const data = await playerRes.json() as PlaybackState;
       if (!data.item) { setTrack(null); setError(''); return; }
       setTrack({
         name: data.item.name,
