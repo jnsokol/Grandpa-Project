@@ -11,7 +11,7 @@ export type Page = {
   layouts: Layouts;
 };
 
-const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
+export const DEFAULT_SIZES: Record<Tile['kind'], { w: number; h: number }> = {
   launcher:   { w: 2, h: 3 },
   bookmarks:  { w: 3, h: 3 },
   calculator: { w: 3, h: 5 },
