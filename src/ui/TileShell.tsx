@@ -28,7 +28,7 @@ export function TileShell({ children, locked, onSettings }: Props) {
       {onSettings && !locked && (
         <button
           onClick={(e) => { e.stopPropagation(); onSettings(); }}
-          className="absolute top-1 right-1 z-20 w-6 h-6 rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-zinc-500 hover:text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all"
+          className="absolute bottom-2 right-2 z-20 w-6 h-6 rounded-lg bg-white/[0.06] hover:bg-white/[0.15] text-zinc-500 hover:text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all"
           aria-label="Tile settings"
           title="Settings"
         >
@@ -36,7 +36,7 @@ export function TileShell({ children, locked, onSettings }: Props) {
         </button>
       )}
 
-      <div className="h-full overflow-auto">{children}</div>
+      <div className="tile-scroll h-full overflow-auto">{children}</div>
     </div>
   );
 }
