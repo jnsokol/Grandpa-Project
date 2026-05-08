@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import type { Layout, Layouts } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -23,29 +23,6 @@ const ResizeHandle = (
   </div>
 );
 
-function hasOverlaps(layout: Layout[]): boolean {
-  for (let i = 0; i < layout.length; i++) {
-    for (let j = i + 1; j < layout.length; j++) {
-      const a = layout[i];
-      const b = layout[j];
-      if (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function buildStackedLayout(tiles: { id: string }[], existing: Layout[]): Layout[] {
-  let y = 0;
-  return tiles.map((tile) => {
-    const e = existing.find((l) => l.i === tile.id);
-    const item: Layout = { i: tile.id, x: 0, y, w: e?.w ?? 3, h: e?.h ?? 3 };
-    y += item.h;
-    return item;
-  });
-}
-
 export function TileGrid() {
   const pages = useTileStore((s) => s.pages);
   const currentPageId = useTileStore((s) => s.currentPageId);
@@ -56,27 +33,6 @@ export function TileGrid() {
   const currentPage = pages.find((p) => p.id === currentPageId);
   const tiles = currentPage?.tiles ?? [];
   const layouts = currentPage?.layouts ?? {};
-
-  // Validate layout BEFORE passing to RGL — RGL does not re-process layouts prop after mount,
-  // so bad data must be caught here synchronously.
-  const safeLayouts = useMemo<Layouts>(() => {
-    const lg = layouts.lg ?? [];
-    const needsFix =
-      tiles.length > 0 &&
-      (lg.length !== tiles.length || (lg.length > 1 && hasOverlaps(lg)));
-    if (needsFix) {
-      return { lg: buildStackedLayout(tiles, lg) };
-    }
-    return layouts;
-  }, [layouts, tiles]);
-
-  // Persist the fixed layout so it's correct on next load
-  useEffect(() => {
-    if (safeLayouts !== layouts) {
-      updateLayouts(safeLayouts);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [safeLayouts]);
 
   const prevCount = useRef(tiles.length);
   useEffect(() => {
@@ -108,7 +64,6 @@ export function TileGrid() {
     return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
   }
 
-  // Only persist the lg layout — other breakpoints are auto-derived by RGL
   function handleLayoutChange(_current: unknown, allLayouts: Layouts) {
     if (allLayouts.lg) {
       updateLayouts({ lg: allLayouts.lg });
@@ -158,7 +113,7 @@ export function TileGrid() {
       <div key={currentPageId} className="page-switch">
       <ResponsiveGridLayout
         className="layout"
-        layouts={safeLayouts}
+        layouts={layouts}
         breakpoints={BREAKPOINTS}
         cols={COLS}
         rowHeight={90}
@@ -171,8 +126,7 @@ export function TileGrid() {
         onDragStop={handleDragStop}
         margin={[16, 16]}
         resizeHandle={ResizeHandle}
-        compactType={null}
-        preventCollision
+        compactType="vertical"
       >
         {tiles.map((tile, i) => (
           <div key={tile.id} className="relative rounded-2xl overflow-hidden tile-enter" style={{ animationDelay: `${i * 25}ms` }}>
