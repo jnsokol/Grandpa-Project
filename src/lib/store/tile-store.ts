@@ -95,13 +95,12 @@ export const useTileStore = create<TileStore>()(
           const page = state.pages[idx];
           const lgLayout = page.layouts.lg ?? [];
           const size = DEFAULT_SIZES[tile.kind];
-          const shifted = lgLayout.map((l) => ({ ...l, y: l.y + size.h }));
+          const maxY = lgLayout.reduce((m, l) => Math.max(m, l.y + l.h), 0);
           const newPage: Page = {
             ...page,
             tiles: [...page.tiles, tile],
             layouts: {
-              ...page.layouts,
-              lg: [...shifted, { i: tile.id, x: 0, y: 0, w: size.w, h: size.h }],
+              lg: [...lgLayout, { i: tile.id, x: 0, y: maxY, w: size.w, h: size.h }],
             },
           };
           const newPages = [...state.pages];
@@ -155,7 +154,7 @@ export const useTileStore = create<TileStore>()(
     }),
     {
       name: 'dashboard-tiles',
-      version: 8,
+      version: 9,
       migrate: (persistedState) => {
         const s = persistedState as { pages?: Page[]; currentPageId?: string; locked?: boolean; bg?: BgConfig; onboardingDone?: boolean };
         if (s?.pages?.length) {

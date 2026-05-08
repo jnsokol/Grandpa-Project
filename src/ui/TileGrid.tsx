@@ -150,8 +150,7 @@ export function TileGrid() {
 
   return (
     <>
-      <div key={currentPageId} className="page-switch">
-        <ResponsiveGridLayout
+      <ResponsiveGridLayout
           className="layout"
           layouts={safeLayouts}
           breakpoints={BREAKPOINTS}
@@ -168,15 +167,14 @@ export function TileGrid() {
           resizeHandle={ResizeHandle}
           compactType="vertical"
         >
-          {tiles.map((tile, i) => (
-            <div key={tile.id} className="relative rounded-2xl overflow-hidden tile-enter" style={{ animationDelay: `${i * 25}ms` }}>
+          {tiles.map((tile) => (
+            <div key={tile.id} className="relative rounded-2xl overflow-hidden">
               <TileShell locked={locked} onSettings={() => setSettingsTileId(tile.id)}>
                 {renderTile(tile)}
               </TileShell>
             </div>
           ))}
-        </ResponsiveGridLayout>
-      </div>
+      </ResponsiveGridLayout>
 
       {settingsTileId && (
         <TileSettingsPanel tileId={settingsTileId} onClose={() => setSettingsTileId(null)} />
