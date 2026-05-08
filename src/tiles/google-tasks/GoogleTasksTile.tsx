@@ -72,7 +72,7 @@ export function GoogleTasksTile({ tile }: Props) {
   const completedTasks = tasks.filter((t) => t.status === 'completed');
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-violet-600 via-violet-700 to-purple-800 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
@@ -82,12 +82,12 @@ export function GoogleTasksTile({ tile }: Props) {
             <select
               value={activeListId ?? ''}
               onChange={(e) => updateTile({ ...tile, taskListId: e.target.value })}
-              className="text-xs text-violet-200 bg-transparent border-none outline-none cursor-pointer mt-0.5"
+              className="text-xs text-zinc-400 bg-transparent border-none outline-none cursor-pointer mt-0.5"
             >
               {taskLists.map((l) => <option key={l.id} value={l.id} className="text-slate-800">{l.title}</option>)}
             </select>
           ) : (
-            <p className="text-violet-200 text-xs">{taskLists[0]?.title ?? 'My Tasks'}</p>
+            <p className="text-zinc-400 text-xs">{taskLists[0]?.title ?? 'My Tasks'}</p>
           )}
         </div>
         <button
@@ -114,11 +114,11 @@ export function GoogleTasksTile({ tile }: Props) {
 
       {/* Tasks list */}
       <div className="flex-1 overflow-auto px-3 pb-3 min-h-0 flex flex-col gap-1">
-        {loading && <p className="text-violet-200 text-sm text-center mt-4">Loading…</p>}
+        {loading && <p className="text-zinc-400 text-sm text-center mt-4">Loading…</p>}
         {error && <p className="text-red-300 text-xs">{error}</p>}
 
         {!loading && activeTasks.length === 0 && (
-          <p className="text-violet-200 text-sm text-center mt-4">No tasks — add one!</p>
+          <p className="text-zinc-400 text-sm text-center mt-4">No tasks — add one!</p>
         )}
 
         {activeTasks.map((task) => (
@@ -129,7 +129,7 @@ export function GoogleTasksTile({ tile }: Props) {
           <div className="mt-1">
             <button
               onClick={() => setShowCompleted((v) => !v)}
-              className="text-xs text-violet-300 hover:text-white transition-colors"
+              className="text-xs text-zinc-400 hover:text-white transition-colors"
             >
               {showCompleted ? '▾' : '▸'} Completed ({completedTasks.length})
             </button>
@@ -150,7 +150,7 @@ function TaskRow({ task, onToggle, onDelete }: { task: Task; onToggle: (t: Task)
       <button
         onClick={() => onToggle(task)}
         className={`w-4 h-4 shrink-0 rounded border-2 flex items-center justify-center text-xs transition-colors ${
-          done ? 'bg-white border-white text-violet-700' : 'border-white/50 hover:border-white'
+          done ? 'bg-white border-white text-zinc-700' : 'border-white/50 hover:border-white'
         }`}
         aria-label={done ? 'Mark incomplete' : 'Mark complete'}
       >

@@ -35,7 +35,7 @@ export function BookmarksTile({ tile }: Props) {
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-3 h-full overflow-auto bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 rounded-xl p-3 text-white">
+      <div className="flex flex-col gap-3 h-full overflow-auto rounded-xl p-3 text-white">
         <div className="flex flex-col gap-1">
           <label className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Title</label>
           <input value={title} onChange={(e) => setTitle(e.target.value)}
@@ -77,7 +77,7 @@ export function BookmarksTile({ tile }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
         <p className="text-base font-bold">🔖 {tile.title}</p>
         <button onClick={() => setEditing(true)} className="text-slate-400 hover:text-white text-sm transition-colors" aria-label="Edit bookmarks">✎</button>

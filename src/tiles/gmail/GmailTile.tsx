@@ -174,10 +174,10 @@ export function GmailTile() {
 
   if (!hasGmailScope) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 bg-gradient-to-br from-red-600 via-red-700 to-rose-800 rounded-xl p-6 text-white text-center">
+      <div className="flex flex-col items-center justify-center h-full gap-4 rounded-xl p-6 text-white text-center">
         <p className="text-4xl">✉️</p>
         <p className="text-sm font-semibold">Gmail access not granted</p>
-        <p className="text-xs text-red-200">Sign out and sign back in to grant Gmail access.</p>
+        <p className="text-xs text-zinc-400">Sign out and sign back in to grant Gmail access.</p>
         <button onClick={signOut} className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-semibold transition-colors">
           Sign out &amp; re-authorize
         </button>
@@ -188,21 +188,21 @@ export function GmailTile() {
   // ── Open message view ──────────────────────────────────────────────────────
   if (openEmail) {
     return (
-      <div className="flex flex-col h-full bg-gradient-to-br from-red-600 via-red-700 to-rose-800 rounded-xl overflow-hidden text-white">
+      <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
         {/* Message header */}
         <div className="flex items-center gap-2 px-3 pt-3 pb-2 shrink-0">
-          <button onClick={() => setOpenEmail(null)} className="text-red-200 hover:text-white text-lg font-bold transition-colors shrink-0">←</button>
+          <button onClick={() => setOpenEmail(null)} className="text-zinc-400 hover:text-white text-lg font-bold transition-colors shrink-0">←</button>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold truncate">{openEmail.subject}</p>
-            <p className="text-xs text-red-200 truncate">{openEmail.fromFull}</p>
+            <p className="text-xs text-zinc-400 truncate">{openEmail.fromFull}</p>
           </div>
-          <span className="text-xs text-red-300 shrink-0">{relativeTime(openEmail.date)}</span>
+          <span className="text-xs text-zinc-400 shrink-0">{relativeTime(openEmail.date)}</span>
         </div>
         <div className="h-px bg-white/10 mx-3 shrink-0" />
         {/* Message body */}
         <div className="flex-1 overflow-auto px-4 py-3 min-h-0">
           {loadingMsg ? (
-            <p className="text-red-200 text-sm animate-pulse">Loading…</p>
+            <p className="text-zinc-400 text-sm animate-pulse">Loading…</p>
           ) : (
             <pre className="text-xs text-white/85 whitespace-pre-wrap break-words leading-relaxed font-sans">
               {openEmail.body || '(empty message)'}
@@ -215,14 +215,14 @@ export function GmailTile() {
 
   // ── Inbox list ─────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-red-600 via-red-700 to-rose-800 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
         <div className="flex items-center gap-2">
           <p className="text-base font-bold">✉️ Gmail</p>
           {unreadCount > 0 && <span className="bg-white/25 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{unreadCount}</span>}
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => token && loadInbox(token.access_token)} className="text-red-200 hover:text-white text-base transition-colors" aria-label="Refresh">↻</button>
+          <button onClick={() => token && loadInbox(token.access_token)} className="text-zinc-400 hover:text-white text-base transition-colors" aria-label="Refresh">↻</button>
           <button onClick={() => { setComposing(true); setSent(false); setSendError(''); }}
             className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white font-bold text-lg transition-colors" aria-label="Compose">✏</button>
         </div>
@@ -232,12 +232,12 @@ export function GmailTile() {
         <form onSubmit={handleSend} className="mx-3 mb-2 bg-white/10 rounded-xl p-3 flex flex-col gap-2 shrink-0">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold">New email</span>
-            <button type="button" onClick={() => setComposing(false)} className="text-red-200 hover:text-white text-lg leading-none">×</button>
+            <button type="button" onClick={() => setComposing(false)} className="text-zinc-400 hover:text-white text-lg leading-none">×</button>
           </div>
           <input value={to} onChange={(e) => setTo(e.target.value)} placeholder="To…" required className="bg-white/15 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/50" />
           <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Subject…" className="bg-white/15 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/50" />
           <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Message…" rows={3} required className="bg-white/15 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none focus:border-white/50 resize-none" />
-          {sendError && <p className="text-red-200 text-xs">{sendError}</p>}
+          {sendError && <p className="text-zinc-400 text-xs">{sendError}</p>}
           <button type="submit" disabled={sending || sent}
             className={`py-1.5 rounded-lg text-sm font-semibold transition-colors disabled:opacity-60 ${sent ? 'bg-green-500/40 text-green-200' : 'bg-white/20 hover:bg-white/30 text-white'}`}>
             {sent ? '✓ Sent!' : sending ? 'Sending…' : 'Send'}
@@ -246,14 +246,14 @@ export function GmailTile() {
       )}
 
       <div className="flex-1 overflow-auto px-3 pb-3 min-h-0 flex flex-col gap-1.5">
-        {loading && <p className="text-red-200 text-sm text-center mt-6">Loading inbox…</p>}
-        {error && <p className="text-red-200 text-xs text-center mt-4">{error}</p>}
-        {!loading && !error && emails.length === 0 && <p className="text-red-200 text-sm text-center mt-6">Inbox is empty</p>}
+        {loading && <p className="text-zinc-400 text-sm text-center mt-6">Loading inbox…</p>}
+        {error && <p className="text-zinc-400 text-xs text-center mt-4">{error}</p>}
+        {!loading && !error && emails.length === 0 && <p className="text-zinc-400 text-sm text-center mt-6">Inbox is empty</p>}
         {emails.map((email) => (
           <button key={email.id} onClick={() => openMessage(email)} className={`w-full text-left rounded-xl px-3 py-2 transition-colors cursor-pointer ${email.unread ? 'bg-white/20 hover:bg-white/30' : 'bg-white/10 hover:bg-white/15'}`}>
             <div className="flex items-center justify-between gap-2">
               <span className={`text-sm truncate ${email.unread ? 'font-bold text-white' : 'font-medium text-white/80'}`}>{email.from}</span>
-              <span className="text-xs text-red-200 shrink-0">{relativeTime(email.date)}</span>
+              <span className="text-xs text-zinc-400 shrink-0">{relativeTime(email.date)}</span>
             </div>
             <p className={`text-xs truncate mt-0.5 ${email.unread ? 'text-white/90' : 'text-white/60'}`}>{email.subject}</p>
             <p className="text-xs text-white/40 truncate mt-0.5">{email.snippet}</p>

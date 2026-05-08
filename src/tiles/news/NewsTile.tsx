@@ -43,7 +43,7 @@ export function NewsTile({ tile }: Props) {
 
   if (editing || !tile.feedUrl) {
     return (
-      <div className="flex flex-col gap-3 h-full bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-xl p-3 text-white">
+      <div className="flex flex-col gap-3 h-full rounded-xl p-3 text-white">
         <p className="text-sm font-semibold">📰 Configure RSS</p>
         <input ref={urlRef} value={draftUrl} onChange={(e) => setDraftUrl(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') saveConfig(); }}
@@ -60,7 +60,7 @@ export function NewsTile({ tile }: Props) {
             Save
           </button>
           {tile.feedUrl && (
-            <button onClick={() => setEditing(false)} className="px-3 py-1.5 text-rose-300 hover:text-white text-sm transition-colors">Cancel</button>
+            <button onClick={() => setEditing(false)} className="px-3 py-1.5 text-zinc-400 hover:text-white text-sm transition-colors">Cancel</button>
           )}
         </div>
       </div>
@@ -68,25 +68,25 @@ export function NewsTile({ tile }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
         <div>
           <p className="text-base font-bold">📰 {tile.label || 'News'}</p>
         </div>
-        <button onClick={() => setEditing(true)} className="text-rose-300 hover:text-white text-sm transition-colors" aria-label="Edit feed">✎</button>
+        <button onClick={() => setEditing(true)} className="text-zinc-400 hover:text-white text-sm transition-colors" aria-label="Edit feed">✎</button>
       </div>
 
       <div className="flex-1 overflow-auto px-3 pb-3 min-h-0 flex flex-col gap-1.5">
-        {loading && <p className="text-rose-200 text-sm text-center mt-4">Loading feed…</p>}
+        {loading && <p className="text-zinc-400 text-sm text-center mt-4">Loading feed…</p>}
         {error && <p className="text-red-200 text-xs text-center mt-2">{error}</p>}
         {!loading && !error && items.length === 0 && (
-          <p className="text-rose-200 text-sm text-center mt-4">No items found.</p>
+          <p className="text-zinc-400 text-sm text-center mt-4">No items found.</p>
         )}
         {items.slice(0, 10).map((item, i) => (
           <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
             className="flex flex-col bg-white/10 hover:bg-white/20 rounded-xl px-3 py-2 transition-colors group">
             <span className="text-sm text-white line-clamp-2 leading-snug">{item.title}</span>
-            <span className="text-xs text-rose-200 mt-0.5">{formatDate(item.pubDate)}</span>
+            <span className="text-xs text-zinc-400 mt-0.5">{formatDate(item.pubDate)}</span>
           </a>
         ))}
       </div>

@@ -78,14 +78,14 @@ export function CalculatorTile(_: { tile: CalculatorTileType }) {
       return 'bg-orange-400 hover:bg-orange-300 text-white';
     if (btn === '=') return 'bg-blue-500 hover:bg-blue-400 text-white';
     if (['C', '±', '%'].includes(btn))
-      return 'bg-slate-200 hover:bg-slate-300 text-slate-800';
-    return 'bg-slate-700 hover:bg-slate-600 text-white';
+      return 'bg-white/[0.15] hover:bg-white/[0.22] text-white';
+    return 'bg-white/[0.08] hover:bg-white/[0.14] text-white';
   }
 
   const topRows = ['C', '±', '%', '÷', '7', '8', '9', '×', '4', '5', '6', '−', '1', '2', '3', '+'];
 
   return (
-    <div className="flex flex-col gap-1.5 h-full bg-gradient-to-br from-slate-700 via-slate-800 to-zinc-900 rounded-xl p-3">
+    <div className="flex flex-col gap-1.5 h-full rounded-xl p-3">
       <div className="rounded-xl bg-black/40 text-white px-4 py-3 min-h-[4rem] flex flex-col justify-end">
         {calc.op && (
           <span className="text-xs text-slate-400 truncate text-right">

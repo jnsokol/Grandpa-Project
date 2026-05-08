@@ -108,18 +108,18 @@ export function GoogleCalendarTile({ tile: _tile }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
         <div>
           <p className="text-base font-bold">📅 Calendar</p>
-          <p className="text-emerald-200 text-xs">Upcoming events</p>
+          <p className="text-zinc-400 text-xs">Upcoming events</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => token && loadEvents(token.access_token)}
-            className="text-emerald-300 hover:text-white text-base transition-colors"
+            className="text-zinc-400 hover:text-white text-base transition-colors"
             aria-label="Refresh"
           >↻</button>
           <button
@@ -157,7 +157,7 @@ export function GoogleCalendarTile({ tile: _tile }: Props) {
               />
             )}
           </div>
-          <label className="flex items-center gap-2 text-xs text-emerald-200 cursor-pointer">
+          <label className="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer">
             <input type="checkbox" checked={allDay} onChange={(e) => setAllDay(e.target.checked)} className="rounded" />
             All day
           </label>
@@ -170,7 +170,7 @@ export function GoogleCalendarTile({ tile: _tile }: Props) {
             <button
               type="button"
               onClick={() => setShowAdd(false)}
-              className="px-3 py-1.5 text-emerald-300 hover:text-white text-sm transition-colors"
+              className="px-3 py-1.5 text-zinc-400 hover:text-white text-sm transition-colors"
             >Cancel</button>
           </div>
         </form>
@@ -178,15 +178,15 @@ export function GoogleCalendarTile({ tile: _tile }: Props) {
 
       {/* Events list */}
       <div className="flex-1 overflow-auto px-3 pb-3 min-h-0 flex flex-col gap-1.5">
-        {loading && <p className="text-emerald-200 text-sm text-center mt-4">Loading…</p>}
+        {loading && <p className="text-zinc-400 text-sm text-center mt-4">Loading…</p>}
         {error && <p className="text-red-300 text-xs text-center mt-2">{error}</p>}
         {!loading && !error && events.length === 0 && (
-          <p className="text-emerald-200 text-sm text-center mt-4">No upcoming events</p>
+          <p className="text-zinc-400 text-sm text-center mt-4">No upcoming events</p>
         )}
         {!loading && events.map((ev) => (
           <div key={ev.id} className="bg-white/10 rounded-xl px-3 py-2">
             <p className="text-white text-sm font-medium truncate">{ev.summary ?? '(no title)'}</p>
-            <p className="text-emerald-200 text-xs mt-0.5">{formatEventTime(ev.start)}</p>
+            <p className="text-zinc-400 text-xs mt-0.5">{formatEventTime(ev.start)}</p>
           </div>
         ))}
       </div>

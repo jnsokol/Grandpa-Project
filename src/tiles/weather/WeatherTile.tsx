@@ -93,7 +93,7 @@ export function WeatherTile({ tile }: Props) {
   // --- Location edit form ---
   if (editing) {
     return (
-      <div className="flex flex-col gap-3 h-full justify-center bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-3">
+      <div className="flex flex-col gap-3 h-full justify-center rounded-xl p-3">
         <p className="text-sm font-semibold text-white">📍 Set location</p>
         <form onSubmit={handleSearch} className="flex gap-2">
           <input
@@ -123,10 +123,10 @@ export function WeatherTile({ tile }: Props) {
   // --- Loading ---
   if (status === 'loading') {
     return (
-      <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl">
+      <div className="flex items-center justify-center h-full rounded-xl">
         <div className="text-center">
           <div className="text-4xl mb-2 animate-pulse">🌤️</div>
-          <p className="text-sm text-blue-200">Loading weather…</p>
+          <p className="text-sm text-zinc-400">Loading weather…</p>
         </div>
       </div>
     );
@@ -135,11 +135,11 @@ export function WeatherTile({ tile }: Props) {
   // --- Error ---
   if (status === 'error' && !data) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 h-full bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl text-center p-3">
+      <div className="flex flex-col items-center justify-center gap-3 h-full rounded-xl text-center p-3">
         <p className="text-sm text-red-300">{errorMsg}</p>
         <div className="flex gap-3">
           <button onClick={handleRefresh} className="text-xs text-white/60 hover:text-white">Retry</button>
-          <button onClick={() => setEditing(true)} className="text-xs text-blue-300 hover:text-blue-100">Set location</button>
+          <button onClick={() => setEditing(true)} className="text-xs text-zinc-400 hover:text-blue-100">Set location</button>
         </div>
       </div>
     );
@@ -150,7 +150,7 @@ export function WeatherTile({ tile }: Props) {
   const { current, daily } = data;
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
 
       {/* Top — main temp + condition */}
       <div className="flex items-center justify-between px-4 pt-3 pb-2">
@@ -158,9 +158,9 @@ export function WeatherTile({ tile }: Props) {
           <p className="text-5xl font-bold tabular-nums leading-none">
             {Math.round(current.temperature_2m)}°
           </p>
-          <p className="text-blue-200 text-sm mt-1 font-medium">{weatherDesc(current.weather_code)}</p>
+          <p className="text-zinc-400 text-sm mt-1 font-medium">{weatherDesc(current.weather_code)}</p>
           {tile.label && (
-            <p className="text-blue-300 text-xs mt-0.5 truncate max-w-[130px]">📍 {tile.label}</p>
+            <p className="text-zinc-400 text-xs mt-0.5 truncate max-w-[130px]">📍 {tile.label}</p>
           )}
         </div>
         <span className="text-6xl leading-none drop-shadow-lg">{weatherEmoji(current.weather_code)}</span>
@@ -169,15 +169,15 @@ export function WeatherTile({ tile }: Props) {
       {/* Stats row — feels like, humidity, wind */}
       <div className="grid grid-cols-3 gap-1 px-3 pb-2">
         <div className="bg-white/10 rounded-lg px-2 py-1.5 text-center">
-          <p className="text-blue-200 text-[10px] font-semibold uppercase tracking-wide">Feels</p>
+          <p className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wide">Feels</p>
           <p className="text-white text-sm font-bold tabular-nums">{Math.round(current.apparent_temperature)}°</p>
         </div>
         <div className="bg-white/10 rounded-lg px-2 py-1.5 text-center">
-          <p className="text-blue-200 text-[10px] font-semibold uppercase tracking-wide">Humid.</p>
+          <p className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wide">Humid.</p>
           <p className="text-white text-sm font-bold tabular-nums">{current.relative_humidity_2m}%</p>
         </div>
         <div className="bg-white/10 rounded-lg px-2 py-1.5 text-center">
-          <p className="text-blue-200 text-[10px] font-semibold uppercase tracking-wide">Wind</p>
+          <p className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wide">Wind</p>
           <p className="text-white text-sm font-bold tabular-nums">{Math.round(current.wind_speed_10m)}<span className="text-[10px] font-normal ml-0.5">km/h</span></p>
         </div>
       </div>
@@ -186,12 +186,12 @@ export function WeatherTile({ tile }: Props) {
       <div className="grid grid-cols-3 gap-1 px-3 pb-2 flex-1">
         {daily.time.map((dateStr, i) => (
           <div key={dateStr} className="bg-white/10 rounded-xl flex flex-col items-center justify-center gap-0.5 py-2">
-            <p className="text-blue-200 text-[10px] font-bold uppercase tracking-wide">{dayLabel(dateStr, i)}</p>
+            <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-wide">{dayLabel(dateStr, i)}</p>
             <span className="text-xl leading-none">{weatherEmoji(daily.weather_code[i])}</span>
             <p className="text-white text-sm font-bold tabular-nums">{Math.round(daily.temperature_2m_max[i])}°</p>
-            <p className="text-blue-300 text-xs tabular-nums">{Math.round(daily.temperature_2m_min[i])}°</p>
+            <p className="text-zinc-400 text-xs tabular-nums">{Math.round(daily.temperature_2m_min[i])}°</p>
             {daily.precipitation_probability_max[i] > 0 && (
-              <p className="text-blue-200 text-[10px]">💧{daily.precipitation_probability_max[i]}%</p>
+              <p className="text-zinc-400 text-[10px]">💧{daily.precipitation_probability_max[i]}%</p>
             )}
           </div>
         ))}
@@ -199,10 +199,10 @@ export function WeatherTile({ tile }: Props) {
 
       {/* Footer */}
       <div className="flex justify-between items-center px-3 pb-2">
-        <button onClick={() => setEditing(true)} className="text-blue-300 hover:text-white text-xs transition-colors">
+        <button onClick={() => setEditing(true)} className="text-zinc-400 hover:text-white text-xs transition-colors">
           📍 Change
         </button>
-        <button onClick={handleRefresh} aria-label="Refresh weather" className="text-blue-300 hover:text-white text-base transition-colors">
+        <button onClick={handleRefresh} aria-label="Refresh weather" className="text-zinc-400 hover:text-white text-base transition-colors">
           ↻
         </button>
       </div>

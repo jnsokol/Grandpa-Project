@@ -35,7 +35,7 @@ export function GoogleSignInGate({ children }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center gap-10 p-8">
+    <div className="min-h-screen bg-[#080810] flex flex-col items-center justify-center gap-10 p-8" style={{ backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 60%)' }}>
 
       {/* Title */}
       <div className="flex flex-col items-center gap-2">
@@ -46,9 +46,9 @@ export function GoogleSignInGate({ children }: Props) {
       </div>
 
       {/* Card */}
-      <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-8 flex flex-col items-center gap-6 w-full max-w-sm shadow-[0_24px_64px_rgba(0,0,0,0.7)]">
+      <div className="bg-white/[0.04] backdrop-blur-2xl rounded-2xl border border-white/[0.08] p-8 flex flex-col items-center gap-6 w-full max-w-sm shadow-[0_24px_64px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.06)]">
 
-        <div className="w-16 h-16 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-3xl shadow-inner">
+        <div className="w-16 h-16 rounded-2xl bg-white/[0.06] border border-white/[0.10] flex items-center justify-center text-3xl shadow-inner">
           👴
         </div>
 

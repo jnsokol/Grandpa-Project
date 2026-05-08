@@ -19,7 +19,7 @@ export function LauncherTile({ tile }: Props) {
 
   if (editing) {
     return (
-      <div className="flex flex-col h-full bg-gradient-to-br from-sky-600 via-sky-700 to-blue-800 rounded-xl p-3 text-white">
+      <div className="flex flex-col h-full rounded-xl p-3 text-white">
         <p className="text-sm font-semibold mb-3">🔗 Set link</p>
         <form onSubmit={save} className="flex flex-col gap-2">
           <div className="flex gap-1">
@@ -34,7 +34,7 @@ export function LauncherTile({ tile }: Props) {
             <button type="submit" className="flex-1 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-semibold text-white transition-colors">Save</button>
             {tile.url && (
               <button type="button" onClick={() => { setLabel(tile.label); setUrl(tile.url); setIcon(tile.icon ?? ''); setEditing(false); }}
-                className="px-3 py-1.5 text-sky-300 hover:text-white text-sm transition-colors">Cancel</button>
+                className="px-3 py-1.5 text-zinc-400 hover:text-white text-sm transition-colors">Cancel</button>
             )}
           </div>
         </form>
@@ -43,7 +43,7 @@ export function LauncherTile({ tile }: Props) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-sky-600 via-sky-700 to-blue-800 rounded-xl text-white gap-2">
+    <div className="flex flex-col items-center justify-center h-full rounded-xl text-white gap-2">
       <a href={tile.url} target="_blank" rel="noopener noreferrer"
         className="flex flex-col items-center gap-2 hover:scale-105 transition-transform">
         {tile.icon ? (
@@ -55,7 +55,7 @@ export function LauncherTile({ tile }: Props) {
         )}
         <span className="text-sm font-semibold text-center">{tile.label}</span>
       </a>
-      <button onClick={() => setEditing(true)} className="text-xs text-sky-300 hover:text-white transition-colors">Edit</button>
+      <button onClick={() => setEditing(true)} className="text-xs text-zinc-400 hover:text-white transition-colors">Edit</button>
     </div>
   );
 }

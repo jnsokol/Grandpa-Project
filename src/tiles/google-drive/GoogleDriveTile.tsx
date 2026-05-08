@@ -25,27 +25,27 @@ export function GoogleDriveTile() {
   }, [connected, token?.access_token]);
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-amber-500 via-orange-600 to-orange-800 rounded-xl overflow-hidden text-white">
+    <div className="flex flex-col h-full rounded-xl overflow-hidden text-white">
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
         <div>
           <p className="text-base font-bold">📁 Drive</p>
-          <p className="text-amber-200 text-xs">Recent files</p>
+          <p className="text-zinc-400 text-xs">Recent files</p>
         </div>
         <button
           onClick={() => token && loadFiles(token.access_token)}
-          className="text-amber-200 hover:text-white text-base transition-colors"
+          className="text-zinc-400 hover:text-white text-base transition-colors"
           aria-label="Refresh"
         >↻</button>
       </div>
 
       {/* Files list */}
       <div className="flex-1 overflow-auto px-3 pb-3 min-h-0 flex flex-col gap-1">
-        {loading && <p className="text-amber-200 text-sm text-center mt-4">Loading…</p>}
+        {loading && <p className="text-zinc-400 text-sm text-center mt-4">Loading…</p>}
         {error && <p className="text-red-300 text-xs text-center mt-2">{error}</p>}
         {!loading && !error && files.length === 0 && (
-          <p className="text-amber-200 text-sm text-center mt-4">No recent files found</p>
+          <p className="text-zinc-400 text-sm text-center mt-4">No recent files found</p>
         )}
         {files.map((file) => (
           <a
@@ -57,7 +57,7 @@ export function GoogleDriveTile() {
           >
             <span className="text-lg shrink-0">{mimeIcon(file.mimeType)}</span>
             <span className="flex-1 text-sm text-white truncate">{file.name}</span>
-            <span className="text-xs text-amber-200 shrink-0">{relativeTime(file.modifiedTime)}</span>
+            <span className="text-xs text-zinc-400 shrink-0">{relativeTime(file.modifiedTime)}</span>
           </a>
         ))}
       </div>

@@ -49,10 +49,10 @@ export function App() {
 
   return (
     <GoogleSignInGate>
-      <div className="min-h-screen bg-zinc-950">
+      <div className="min-h-screen bg-[#080810]" style={{ backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 60%)' }}>
 
         {/* ── Header ── */}
-        <header className="sticky top-0 z-20 flex items-center justify-between px-8 py-4 bg-zinc-900 border-b border-zinc-800 shadow-[0_4px_32px_rgba(0,0,0,0.6)]">
+        <header className="sticky top-0 z-20 flex items-center justify-between px-8 py-4 bg-[#0d0d14]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_1px_0_rgba(255,255,255,0.04),0_4px_32px_rgba(0,0,0,0.5)]">
 
           {/* Left — clock */}
           <Clock />
@@ -80,14 +80,14 @@ export function App() {
                   </div>
                 )}
                 <button onClick={signOut}
-                  className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-zinc-600 text-zinc-400 hover:text-white text-xs font-medium transition-all">
+                  className="px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.10] border border-white/[0.08] hover:border-white/[0.15] text-zinc-400 hover:text-white text-xs font-medium transition-all">
                   Sign out
                 </button>
               </div>
             )}
 
             {/* Divider */}
-            {profile && <div className="w-px h-5 bg-zinc-700" />}
+            {profile && <div className="w-px h-5 bg-white/[0.08]" />}
 
             {/* Add tile */}
             <div className="relative">
@@ -96,10 +96,10 @@ export function App() {
                 aria-expanded={menuOpen}
                 aria-haspopup="menu"
                 aria-label="Add tile"
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                   menuOpen
-                    ? 'bg-blue-500 text-white shadow-blue-500/25'
-                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20 hover:shadow-blue-500/30'
+                    ? 'bg-indigo-500/90 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]'
+                    : 'bg-indigo-600/80 hover:bg-indigo-500/90 text-white border border-indigo-400/20 hover:border-indigo-400/40 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]'
                 }`}
               >
                 <span className={`text-base leading-none transition-transform duration-200 ${menuOpen ? 'rotate-45' : ''}`}>+</span>
@@ -108,15 +108,14 @@ export function App() {
 
               {menuOpen && (
                 <div role="menu"
-                  className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-[0_16px_48px_rgba(0,0,0,0.7)] py-1.5 z-50 overflow-hidden">
-                  {/* Grid split into 2 columns for visual density */}
+                  className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-[#0d0d14]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.8)] py-1.5 z-50 overflow-hidden">
                   {menuItems.map((item) => (
                     <button key={item.label} role="menuitem"
                       onClick={() => { item.action(); setMenuOpen(false); }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors">
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors">
                       <span className="text-base w-5 text-center shrink-0">{item.emoji}</span>
                       <span className="flex-1 font-medium text-left">{item.label}</span>
-                      <kbd className="text-[10px] text-zinc-600 font-mono bg-zinc-800/80 border border-zinc-700 rounded px-1.5 py-0.5">⌥{item.shortcut}</kbd>
+                      <kbd className="text-[10px] text-zinc-600 font-mono bg-white/[0.05] border border-white/[0.08] rounded px-1.5 py-0.5">⌥{item.shortcut}</kbd>
                     </button>
                   ))}
                 </div>
